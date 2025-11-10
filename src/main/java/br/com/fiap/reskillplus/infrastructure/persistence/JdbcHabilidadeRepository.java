@@ -14,6 +14,9 @@ public class JdbcHabilidadeRepository implements HabilidadeRepository {
     @Inject
     DatabaseConnection databaseConnection;
 
+    public JdbcHabilidadeRepository(DatabaseConnection databaseConnection) {
+    }
+
     @Override
     public void salvar(Habilidade habilidade) {
         String sql = "INSERT INTO HABILIDADE (USUARIOID, NOMEHABILIDADE, NIVELPROFICIENCIA) VALUES (?, ?, ?)";
@@ -26,6 +29,11 @@ public class JdbcHabilidadeRepository implements HabilidadeRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar habilidade: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Habilidade buscarPorId(Long id) {
+        return null;
     }
 
     @Override
@@ -49,6 +57,11 @@ public class JdbcHabilidadeRepository implements HabilidadeRepository {
             throw new RuntimeException("Erro ao listar habilidades: " + e.getMessage(), e);
         }
         return lista;
+    }
+
+    @Override
+    public void atualizar(Habilidade habilidade) {
+
     }
 
     @Override

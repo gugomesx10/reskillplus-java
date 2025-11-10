@@ -13,6 +13,9 @@ public class CursoServiceImpl implements CursoService {
     @Inject
     CursoRepository cursoRepository;
 
+    public CursoServiceImpl(CursoRepository cursoRepository) {
+    }
+
     @Override
     public void criar(Curso curso) {
         cursoRepository.salvar(curso);

@@ -10,4 +10,6 @@ public interface MatriculaRepository {
     List<Matricula> listarPorCurso(Long cursoId);
     void atualizar(Matricula matricula);
     void deletar(Long id);
+
+    void atualizarProgresso(Long id, Integer progresso);
 }

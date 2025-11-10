@@ -13,6 +13,9 @@ public class RecomendacaoServiceImpl implements RecomendacaoService {
     @Inject
     RecomendacaoRepository recomendacaoRepository;
 
+    public RecomendacaoServiceImpl(RecomendacaoRepository recomendacaoRepository) {
+    }
+
     @Override
     public void gerar(Recomendacao recomendacao) {
         recomendacaoRepository.salvar(recomendacao);
@@ -21,5 +24,10 @@ public class RecomendacaoServiceImpl implements RecomendacaoService {
     @Override
     public List<Recomendacao> listarPorUsuario(Long usuarioId) {
         return recomendacaoRepository.listarPorUsuario(usuarioId);
+    }
+
+    @Override
+    public void deletar(Long id) {
+        recomendacaoRepository.deletar(id);
     }
 }

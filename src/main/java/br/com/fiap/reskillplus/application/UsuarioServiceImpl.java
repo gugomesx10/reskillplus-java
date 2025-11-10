@@ -13,6 +13,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Inject
     UsuarioRepository usuarioRepository;
 
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+    }
+
     @Override
     public void cadastrar(Usuario usuario) {
         usuarioRepository.salvar(usuario);
@@ -41,5 +44,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void remover(Long id) {
         usuarioRepository.deletar(id);
+    }
+
+    @Override
+    public void criarUsuario(Usuario usuario) {
+
     }
 }

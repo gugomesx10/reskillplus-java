@@ -14,6 +14,9 @@ public class JdbcUsuarioRepository implements UsuarioRepository {
     @Inject
     DatabaseConnection databaseConnection;
 
+    public JdbcUsuarioRepository(DatabaseConnection databaseConnection) {
+    }
+
     @Override
     public void salvar(Usuario usuario) {
         String sql = "INSERT INTO USUARIO (NOME, EMAIL, SENHA, NIVELEDUCACAO, AREASINTERESSE, DATACRIACAO) VALUES (?, ?, ?, ?, ?, ?)";

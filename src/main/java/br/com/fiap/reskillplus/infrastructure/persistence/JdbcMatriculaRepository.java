@@ -14,6 +14,9 @@ public class JdbcMatriculaRepository implements MatriculaRepository {
     @Inject
     DatabaseConnection databaseConnection;
 
+    public JdbcMatriculaRepository(DatabaseConnection databaseConnection) {
+    }
+
     @Override
     public void salvar(Matricula matricula) {
         String sql = "INSERT INTO MATRICULA (USUARIOID, CURSOID, DATAMATRICULA, STATUS, PROGRESSO) VALUES (?, ?, ?, ?, ?)";
@@ -28,6 +31,11 @@ public class JdbcMatriculaRepository implements MatriculaRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar matrícula: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Matricula buscarPorId(Long id) {
+        return null;
     }
 
     @Override
@@ -53,6 +61,21 @@ public class JdbcMatriculaRepository implements MatriculaRepository {
             throw new RuntimeException("Erro ao listar matrículas: " + e.getMessage(), e);
         }
         return lista;
+    }
+
+    @Override
+    public List<Matricula> listarPorCurso(Long cursoId) {
+        return List.of();
+    }
+
+    @Override
+    public void atualizar(Matricula matricula) {
+
+    }
+
+    @Override
+    public void deletar(Long id) {
+
     }
 
     @Override

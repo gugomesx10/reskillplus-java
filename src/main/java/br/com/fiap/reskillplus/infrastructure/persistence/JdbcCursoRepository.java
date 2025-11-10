@@ -14,6 +14,9 @@ public class JdbcCursoRepository implements CursoRepository {
     @Inject
     DatabaseConnection databaseConnection;
 
+    public JdbcCursoRepository(DatabaseConnection databaseConnection) {
+    }
+
     @Override
     public void salvar(Curso curso) {
         String sql = "INSERT INTO CURSO (TITULO, DESCRICAO, CATEGORIA, DURACAOHORAS, NIVEL, DATACRIACAO) VALUES (?, ?, ?, ?, ?, ?)";

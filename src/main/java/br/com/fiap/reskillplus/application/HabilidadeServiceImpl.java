@@ -13,6 +13,9 @@ public class HabilidadeServiceImpl implements HabilidadeService {
     @Inject
     HabilidadeRepository habilidadeRepository;
 
+    public HabilidadeServiceImpl(HabilidadeRepository habilidadeRepository) {
+    }
+
     @Override
     public void adicionar(Habilidade habilidade) {
         habilidadeRepository.salvar(habilidade);

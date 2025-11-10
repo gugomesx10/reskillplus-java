@@ -14,6 +14,9 @@ public class JdbcFeedbackRepository implements FeedbackRepository {
     @Inject
     DatabaseConnection databaseConnection;
 
+    public JdbcFeedbackRepository(DatabaseConnection databaseConnection) {
+    }
+
     @Override
     public void salvar(Feedback feedback) {
         String sql = "INSERT INTO FEEDBACK (USUARIOID, CURSOID, AVALIACAO, COMENTARIO, DATAFEEDBACK) VALUES (?, ?, ?, ?, ?)";
@@ -77,6 +80,11 @@ public class JdbcFeedbackRepository implements FeedbackRepository {
             throw new RuntimeException("Erro ao listar feedbacks: " + e.getMessage(), e);
         }
         return lista;
+    }
+
+    @Override
+    public List<Feedback> listarPorUsuario(Long usuarioId) {
+        return List.of();
     }
 
     @Override

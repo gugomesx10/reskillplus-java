@@ -1,4 +1,6 @@
 package br.com.fiap.reskillplus.application.service;
 
-public class ApiKeyValidator {
+public interface ApiKeyValidator {
+    boolean isValid(String apiKey);
+    boolean isPresent(String apiKey);
 }

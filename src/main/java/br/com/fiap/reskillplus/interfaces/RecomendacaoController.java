@@ -1,4 +1,9 @@
 package br.com.fiap.reskillplus.interfaces;
 
-public class RecomendacaoController {
+import br.com.fiap.reskillplus.domain.model.Recomendacao;
+import java.util.List;
+
+public interface RecomendacaoController {
+    void gerar(Recomendacao recomendacao);
+    List<Recomendacao> listarPorUsuario(Long usuarioId);
 }

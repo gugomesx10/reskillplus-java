@@ -14,6 +14,9 @@ public class JdbcRecomendacaoRepository implements RecomendacaoRepository {
     @Inject
     DatabaseConnection databaseConnection;
 
+    public JdbcRecomendacaoRepository(DatabaseConnection databaseConnection) {
+    }
+
     @Override
     public void salvar(Recomendacao recomendacao) {
         String sql = "INSERT INTO RECOMENDACAO (USUARIOID, CURSOID, PONTUACAO, DATARECOMENDACAO) VALUES (?, ?, ?, ?)";
@@ -27,6 +30,11 @@ public class JdbcRecomendacaoRepository implements RecomendacaoRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar recomendação: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Recomendacao buscarPorId(Long id) {
+        return null;
     }
 
     @Override
@@ -51,5 +59,10 @@ public class JdbcRecomendacaoRepository implements RecomendacaoRepository {
             throw new RuntimeException("Erro ao listar recomendações: " + e.getMessage(), e);
         }
         return lista;
+    }
+
+    @Override
+    public void deletar(Long id) {
+
     }
 }

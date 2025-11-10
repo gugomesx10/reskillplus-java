@@ -13,6 +13,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Inject
     FeedbackRepository feedbackRepository;
 
+    public FeedbackServiceImpl(FeedbackRepository feedbackRepository) {
+    }
+
     @Override
     public void registrar(Feedback feedback) {
         feedbackRepository.salvar(feedback);
@@ -36,5 +39,10 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public void deletar(Long id) {
         feedbackRepository.deletar(id);
+    }
+
+    @Override
+    public void registrarFeedback(Feedback feedback) {
+
     }
 }
