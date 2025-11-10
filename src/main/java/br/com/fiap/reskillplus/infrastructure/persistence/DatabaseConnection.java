@@ -1,4 +1,10 @@
 package br.com.fiap.reskillplus.infrastructure.persistence;
 
-public class DatabaseConnection {
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public interface DatabaseConnection {
+
+    Connection getConnection() throws SQLException;
+
 }
