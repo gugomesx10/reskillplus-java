@@ -1,4 +1,4 @@
-package br.com.fiap;
+package br.com.fiap.reskillplus;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
