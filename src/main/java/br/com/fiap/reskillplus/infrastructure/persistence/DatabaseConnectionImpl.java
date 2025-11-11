@@ -1,24 +1,21 @@
 package br.com.fiap.reskillplus.infrastructure.persistence;
 
-import jakarta.inject.Inject;
-import javax.sql.DataSource;
+import io.agroal.api.AgroalDataSource;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public final class DatabaseConnectionImpl implements DatabaseConnection {
+@ApplicationScoped
+public class DatabaseConnectionImpl implements DatabaseConnection {
 
-    @Inject
-    DataSource dataSource;
+    private final AgroalDataSource dataSource;
 
-    @Inject
-    private DatabaseConnectionImpl connection;
-
-    public DatabaseConnectionImpl(DataSource dataSource) {
+    public DatabaseConnectionImpl(AgroalDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public Connection getConnection() throws SQLException {
-        return this.dataSource.getConnection();
+        return dataSource.getConnection();
     }
 }

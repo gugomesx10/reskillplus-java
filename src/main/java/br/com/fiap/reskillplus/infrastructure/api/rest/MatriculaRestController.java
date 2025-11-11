@@ -1,37 +1,54 @@
 package br.com.fiap.reskillplus.infrastructure.api.rest;
 
-import br.com.fiap.reskillplus.domain.model.Matricula;
-import br.com.fiap.reskillplus.domain.service.MatriculaService;
-import jakarta.inject.Inject;
+import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
+import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
+import br.com.fiap.reskillplus.interfaces.MatriculaController;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
-@Path("/matriculas")
+@Path("/matricula")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MatriculaRestController {
 
-    @Inject
-    MatriculaService matriculaService;
+    private final MatriculaController matriculaController;
+
+    public MatriculaRestController(MatriculaController matriculaController) {
+        this.matriculaController = matriculaController;
+    }
 
     @POST
-    public Response matricular(Matricula matricula) {
-        matriculaService.matricular(matricula);
-        return Response.status(Response.Status.CREATED).entity(matricula).build();
+    public Response cadastrar(MatriculaInputDTO dto) {
+        try {
+            MatriculaOutputDTO saida = matriculaController.cadastrar(dto);
+            return Response.status(Response.Status.CREATED).entity(saida).build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("erro", e.getMessage()))
+                    .build();
+        }
+    }
+
+    @GET
+    public Response listarTodas() {
+        List<MatriculaOutputDTO> matriculas = matriculaController.listarTodas();
+        return Response.ok(matriculas).build();
     }
 
     @GET
     @Path("/usuario/{usuarioId}")
-    public List<Matricula> listarPorUsuario(@PathParam("usuarioId") Long usuarioId) {
-        return matriculaService.listarPorUsuario(usuarioId);
+    public Response listarPorUsuario(@PathParam("usuarioId") int usuarioId) {
+        List<MatriculaOutputDTO> matriculas = matriculaController.listarPorUsuario(usuarioId);
+        return Response.ok(matriculas).build();
     }
 
-    @PATCH
-    @Path("/{id}/progresso/{valor}")
-    public Response atualizarProgresso(@PathParam("id") Long id, @PathParam("valor") Integer progresso) {
-        matriculaService.atualizarProgresso(id, progresso);
-        return Response.ok().build();
+    @DELETE
+    @Path("/{id}")
+    public Response deletar(@PathParam("id") int id) {
+        matriculaController.deletar(id);
+        return Response.noContent().build();
     }
 }

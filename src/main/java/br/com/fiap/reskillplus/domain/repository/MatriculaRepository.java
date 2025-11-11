@@ -4,12 +4,11 @@ import br.com.fiap.reskillplus.domain.model.Matricula;
 import java.util.List;
 
 public interface MatriculaRepository {
-    void salvar(Matricula matricula);
-    Matricula buscarPorId(Long id);
-    List<Matricula> listarPorUsuario(Long usuarioId);
-    List<Matricula> listarPorCurso(Long cursoId);
-    void atualizar(Matricula matricula);
-    void deletar(Long id);
 
-    void atualizarProgresso(Long id, Integer progresso);
+    void salvar(Matricula matricula);
+    void atualizarProgresso(int id, boolean concluido);
+    void deletar(int id);
+    Matricula buscarPorId(int id);
+    List<Matricula> listarPorUsuario(int usuarioId);
+    List<Matricula> listarTodas();
 }

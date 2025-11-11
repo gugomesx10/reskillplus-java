@@ -1,47 +1,26 @@
-package br.com.fiap.reskillplus.domain.model;
+package br.com.fiap.reskillplus.dto.input;
 
-import java.util.Objects;
+public class CursoInputDTO {
 
-public class Curso {
-
-    private int id;
     private String titulo;
     private String descricao;
     private String categoria;
     private int cargaHoraria;
 
-    public Curso() {}
-
-    public Curso(int id, String titulo, String descricao, String categoria, int cargaHoraria) {
-        this.id = id;
+    public CursoInputDTO(String titulo, String descricao, String categoria, int cargaHoraria) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.categoria = categoria;
         this.cargaHoraria = cargaHoraria;
     }
 
-    public int getId() { return id; }
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
     public String getCategoria() { return categoria; }
     public int getCargaHoraria() { return cargaHoraria; }
 
-    public void setId(int id) { this.id = id; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
     public void setCargaHoraria(int cargaHoraria) { this.cargaHoraria = cargaHoraria; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Curso)) return false;
-        Curso curso = (Curso) o;
-        return id == curso.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

@@ -1,24 +1,34 @@
 package br.com.fiap.reskillplus.mapper;
 
 import br.com.fiap.reskillplus.domain.model.Usuario;
-import br.com.fiap.reskillplus.dto.input.UsuarioInputDto;
-import br.com.fiap.reskillplus.dto.output.UsuarioOutputDto;
-import java.time.LocalDateTime;
+import br.com.fiap.reskillplus.dto.input.UsuarioInputDTO;
+import br.com.fiap.reskillplus.dto.output.UsuarioOutputDTO;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UsuarioMapper {
 
-    public static Usuario toEntity(UsuarioInputDto dto) {
-        return new Usuario(null, dto.nome, dto.email, dto.senha, dto.nivelEducacao, dto.areasInteresse, LocalDateTime.now());
+    public static Usuario toEntity(UsuarioInputDTO dto) {
+        return new Usuario(
+                0, // ID gerado pelo banco
+                dto.getNome(),
+                dto.getEmail(),
+                dto.getSenha(),
+                dto.getPapel()
+        );
     }
 
-    public static UsuarioOutputDto toOutput(Usuario entity) {
-        UsuarioOutputDto dto = new UsuarioOutputDto();
-        dto.id = entity.getId();
-        dto.nome = entity.getNome();
-        dto.email = entity.getEmail();
-        dto.nivelEducacao = entity.getNivelEducacao();
-        dto.areasInteresse = entity.getAreasInteresse();
-        dto.dataCriacao = entity.getDataCriacao();
-        return dto;
+    public static UsuarioOutputDTO toOutputDTO(Usuario entity) {
+        if (entity == null) return null;
+        return new UsuarioOutputDTO(
+                entity.getId(),
+                entity.getNome(),
+                entity.getEmail(),
+                entity.getPapel()
+        );
+    }
+
+    public static List<UsuarioOutputDTO> toOutputList(List<Usuario> entities) {
+        return entities.stream().map(UsuarioMapper::toOutputDTO).collect(Collectors.toList());
     }
 }

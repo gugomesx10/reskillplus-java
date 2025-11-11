@@ -1,33 +1,38 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.domain.model.Usuario;
-import br.com.fiap.reskillplus.domain.service.UsuarioService;
+import br.com.fiap.reskillplus.application.UsuarioServiceImpl;
+import br.com.fiap.reskillplus.dto.input.UsuarioInputDTO;
+import br.com.fiap.reskillplus.dto.output.UsuarioOutputDTO;
+import br.com.fiap.reskillplus.mapper.UsuarioMapper;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
 public class UsuarioControllerImpl implements UsuarioController {
 
-    private final UsuarioService usuarioService;
+    private final UsuarioServiceImpl usuarioServiceImpl;
 
-    @Inject
-    public UsuarioControllerImpl(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public UsuarioControllerImpl(UsuarioServiceImpl usuarioServiceImpl) {
+        this.usuarioServiceImpl = usuarioServiceImpl;
     }
 
     @Override
-    public void criarUsuario(Usuario usuario) {
-        usuarioService.criarUsuario(usuario);
+    public UsuarioOutputDTO cadastrar(UsuarioInputDTO dto) {
+        return UsuarioMapper.toOutputDTO(usuarioServiceImpl.cadastrar(UsuarioMapper.toEntity(dto)));
     }
 
     @Override
-    public List<Usuario> listarUsuarios() {
-        return usuarioService.listarUsuarios();
+    public UsuarioOutputDTO buscarPorId(int id) {
+        return UsuarioMapper.toOutputDTO(usuarioServiceImpl.buscarPorId(id));
     }
 
     @Override
-    public Usuario buscarPorEmail(String email) {
-        return usuarioService.buscarPorEmail(email);
+    public List<UsuarioOutputDTO> listarTodos() {
+        return UsuarioMapper.toOutputList(usuarioServiceImpl.listarTodos());
+    }
+
+    @Override
+    public void deletar(int id) {
+        usuarioServiceImpl.deletar(id);
     }
 }

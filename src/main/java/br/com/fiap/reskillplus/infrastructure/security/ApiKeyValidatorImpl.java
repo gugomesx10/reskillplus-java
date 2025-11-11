@@ -17,6 +17,6 @@ public class ApiKeyValidatorImpl implements ApiKeyValidator {
 
     @Override
     public boolean isPresent(String apiKey) {
-        return apiKey != null && !apiKey.trim().isEmpty();
+        return apiKey != null && !apiKey.isBlank();
     }
 }

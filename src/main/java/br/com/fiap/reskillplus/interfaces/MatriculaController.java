@@ -1,10 +1,12 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.domain.model.Matricula;
+import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
+import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
 import java.util.List;
 
 public interface MatriculaController {
-    void matricular(Matricula matricula);
-    List<Matricula> listarPorUsuario(Long usuarioId);
-    void atualizarProgresso(Long id, Integer progresso);
+    MatriculaOutputDTO cadastrar(MatriculaInputDTO dto);
+    List<MatriculaOutputDTO> listarTodas();
+    List<MatriculaOutputDTO> listarPorUsuario(int usuarioId);
+    void deletar(int id);
 }

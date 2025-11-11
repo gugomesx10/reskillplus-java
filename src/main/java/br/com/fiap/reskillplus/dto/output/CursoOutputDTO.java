@@ -1,8 +1,6 @@
-package br.com.fiap.reskillplus.domain.model;
+package br.com.fiap.reskillplus.dto.output;
 
-import java.util.Objects;
-
-public class Curso {
+public class CursoOutputDTO {
 
     private int id;
     private String titulo;
@@ -10,9 +8,7 @@ public class Curso {
     private String categoria;
     private int cargaHoraria;
 
-    public Curso() {}
-
-    public Curso(int id, String titulo, String descricao, String categoria, int cargaHoraria) {
+    public CursoOutputDTO(int id, String titulo, String descricao, String categoria, int cargaHoraria) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -31,17 +27,4 @@ public class Curso {
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
     public void setCargaHoraria(int cargaHoraria) { this.cargaHoraria = cargaHoraria; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Curso)) return false;
-        Curso curso = (Curso) o;
-        return id == curso.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

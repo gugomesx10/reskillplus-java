@@ -4,42 +4,38 @@ import br.com.fiap.reskillplus.domain.repository.*;
 import br.com.fiap.reskillplus.infrastructure.persistence.*;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class DatabaseConfig {
 
-    @ApplicationScoped
+    @Produces
     public DatabaseConnection databaseConnection(AgroalDataSource dataSource) {
         return new DatabaseConnectionImpl(dataSource);
     }
 
-    @ApplicationScoped
+    @Produces
+    public UsuarioRepository usuarioRepository(DatabaseConnection databaseConnection) {
+        return new JdbcUsuarioRepository(databaseConnection);
+    }
+
+    @Produces
     public CursoRepository cursoRepository(DatabaseConnection databaseConnection) {
         return new JdbcCursoRepository(databaseConnection);
     }
 
-    @ApplicationScoped
-    public FeedbackRepository feedbackRepository(DatabaseConnection databaseConnection) {
-        return new JdbcFeedbackRepository(databaseConnection);
-    }
-
-    @ApplicationScoped
-    public HabilidadeRepository habilidadeRepository(DatabaseConnection databaseConnection) {
-        return new JdbcHabilidadeRepository(databaseConnection);
-    }
-
-    @ApplicationScoped
+    @Produces
     public MatriculaRepository matriculaRepository(DatabaseConnection databaseConnection) {
         return new JdbcMatriculaRepository(databaseConnection);
     }
 
-    @ApplicationScoped
-    public RecomendacaoRepository recomendacaoRepository(DatabaseConnection databaseConnection) {
-        return new JdbcRecomendacaoRepository(databaseConnection);
+    @Produces
+    public HabilidadeRepository habilidadeRepository(DatabaseConnection databaseConnection) {
+        return new JdbcHabilidadeRepository(databaseConnection);
     }
 
-    @ApplicationScoped
-    public UsuarioRepository usuarioRepository(DatabaseConnection databaseConnection) {
-        return new JdbcUsuarioRepository(databaseConnection);
+    @Produces
+    public RecomendacaoRepository recomendacaoRepository(DatabaseConnection databaseConnection) {
+        return new JdbcRecomendacaoRepository(databaseConnection);
     }
 }

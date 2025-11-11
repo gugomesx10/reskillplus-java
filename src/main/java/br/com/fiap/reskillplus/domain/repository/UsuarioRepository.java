@@ -4,10 +4,11 @@ import br.com.fiap.reskillplus.domain.model.Usuario;
 import java.util.List;
 
 public interface UsuarioRepository {
+
     void salvar(Usuario usuario);
-    Usuario buscarPorId(Long id);
+    void atualizar(Usuario usuario);
+    void deletar(int id);
+    Usuario buscarPorId(int id);
     Usuario buscarPorEmail(String email);
     List<Usuario> listarTodos();
-    void atualizar(Usuario usuario);
-    void deletar(Long id);
 }

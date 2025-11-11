@@ -1,39 +1,60 @@
 package br.com.fiap.reskillplus.domain.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-/**
- * Entidade de domínio Recomendacao
- */
 public class Recomendacao {
-    private Long id;
-    private Long usuarioId;
-    private Long cursoId;
-    private Double pontuacao;
-    private LocalDateTime dataRecomendacao;
 
-    public Recomendacao() {}
+    private int id;
+    private int usuarioId;
+    private int cursoId;
+    private double relevancia;
+    private Date dataGeracao;
 
-    public Recomendacao(Long id, Long usuarioId, Long cursoId, Double pontuacao, LocalDateTime dataRecomendacao) {
+    public Recomendacao(int id, int usuarioId, int cursoId, double relevancia, Date dataGeracao) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.cursoId = cursoId;
-        this.pontuacao = pontuacao;
-        this.dataRecomendacao = dataRecomendacao;
+        this.relevancia = relevancia;
+        this.dataGeracao = dataGeracao;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public Long getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+    public int getUsuarioId() {
+        return usuarioId;
+    }
 
-    public Long getCursoId() { return cursoId; }
-    public void setCursoId(Long cursoId) { this.cursoId = cursoId; }
+    public int getCursoId() {
+        return cursoId;
+    }
 
-    public Double getPontuacao() { return pontuacao; }
-    public void setPontuacao(Double pontuacao) { this.pontuacao = pontuacao; }
+    public double getRelevancia() {
+        return relevancia;
+    }
 
-    public LocalDateTime getDataRecomendacao() { return dataRecomendacao; }
-    public void setDataRecomendacao(LocalDateTime dataRecomendacao) { this.dataRecomendacao = dataRecomendacao; }
+    public Date getDataGeracao() {
+        return dataGeracao;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public void setCursoId(int cursoId) {
+        this.cursoId = cursoId;
+    }
+
+    public void setRelevancia(double relevancia) {
+        this.relevancia = relevancia;
+    }
+
+    public void setDataGeracao(Date dataGeracao) {
+        this.dataGeracao = dataGeracao;
+    }
 }

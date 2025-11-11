@@ -2,52 +2,45 @@ package br.com.fiap.reskillplus.application;
 
 import br.com.fiap.reskillplus.domain.model.Matricula;
 import br.com.fiap.reskillplus.domain.repository.MatriculaRepository;
-import br.com.fiap.reskillplus.domain.service.MatriculaService;
+import br.com.fiap.reskillplus.domain.service.MatriculaDomainService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
-public class MatriculaServiceImpl implements MatriculaService {
+public class MatriculaServiceImpl {
 
     @Inject
-    MatriculaRepository matriculaRepository;
+    MatriculaRepository repository;
+
+    @Inject
+    MatriculaDomainService domainService;
 
     public MatriculaServiceImpl(MatriculaRepository matriculaRepository) {
     }
 
-    @Override
-    public void matricular(Matricula matricula) {
-        matriculaRepository.salvar(matricula);
+    public Matricula cadastrar(Matricula matricula) {
+        if (!domainService.podeMatricular(matricula))
+            throw new IllegalArgumentException("Matrícula inválida.");
+        repository.salvar(matricula);
+        return matricula;
     }
 
-    @Override
-    public Matricula buscarPorId(Long id) {
-        return matriculaRepository.buscarPorId(id);
+    public void concluir(int id) {
+        Matricula matricula = repository.buscarPorId(id);
+        domainService.concluirCurso(matricula);
+        repository.atualizarProgresso(id, matricula.isConcluido());
     }
 
-    @Override
-    public List<Matricula> listarPorUsuario(Long usuarioId) {
-        return matriculaRepository.listarPorUsuario(usuarioId);
+    public List<Matricula> listarTodas() {
+        return repository.listarTodas();
     }
 
-    @Override
-    public List<Matricula> listarPorCurso(Long cursoId) {
-        return matriculaRepository.listarPorCurso(cursoId);
+    public List<Matricula> listarPorUsuario(int usuarioId) {
+        return repository.listarPorUsuario(usuarioId);
     }
 
-    @Override
-    public void atualizar(Matricula matricula) {
-        matriculaRepository.atualizar(matricula);
-    }
-
-    @Override
-    public void cancelar(Long id) {
-        matriculaRepository.deletar(id);
-    }
-
-    @Override
-    public void atualizarProgresso(Long id, Integer progresso) {
-        matriculaRepository.atualizarProgresso(id, progresso);
+    public void deletar(int id) {
+        repository.deletar(id);
     }
 }

@@ -1,45 +1,60 @@
 package br.com.fiap.reskillplus.domain.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-/**
- * Entidade de domínio Matricula
- */
 public class Matricula {
-    private Long id;
-    private Long usuarioId;
-    private Long cursoId;
-    private LocalDateTime dataMatricula;
-    private String status;
-    private Integer progresso;
 
-    public Matricula() {}
+    private int id;
+    private int usuarioId;
+    private int cursoId;
+    private Date dataMatricula;
+    private boolean concluido;
 
-    public Matricula(Long id, Long usuarioId, Long cursoId, LocalDateTime dataMatricula,
-                     String status, Integer progresso) {
+    public Matricula(int id, int usuarioId, int cursoId, Date dataMatricula, boolean concluido) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.cursoId = cursoId;
         this.dataMatricula = dataMatricula;
-        this.status = status;
-        this.progresso = progresso;
+        this.concluido = concluido;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public Long getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+    public int getUsuarioId() {
+        return usuarioId;
+    }
 
-    public Long getCursoId() { return cursoId; }
-    public void setCursoId(Long cursoId) { this.cursoId = cursoId; }
+    public int getCursoId() {
+        return cursoId;
+    }
 
-    public LocalDateTime getDataMatricula() { return dataMatricula; }
-    public void setDataMatricula(LocalDateTime dataMatricula) { this.dataMatricula = dataMatricula; }
+    public Date getDataMatricula() {
+        return dataMatricula;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public boolean isConcluido() {
+        return concluido;
+    }
 
-    public Integer getProgresso() { return progresso; }
-    public void setProgresso(Integer progresso) { this.progresso = progresso; }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public void setCursoId(int cursoId) {
+        this.cursoId = cursoId;
+    }
+
+    public void setDataMatricula(Date dataMatricula) {
+        this.dataMatricula = dataMatricula;
+    }
+
+    public void setConcluido(boolean concluido) {
+        this.concluido = concluido;
+    }
 }

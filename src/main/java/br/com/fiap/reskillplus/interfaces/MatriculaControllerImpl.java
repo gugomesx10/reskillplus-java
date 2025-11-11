@@ -1,33 +1,38 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.domain.model.Matricula;
-import br.com.fiap.reskillplus.domain.service.MatriculaService;
+import br.com.fiap.reskillplus.application.MatriculaServiceImpl;
+import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
+import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
+import br.com.fiap.reskillplus.mapper.MatriculaMapper;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
 public class MatriculaControllerImpl implements MatriculaController {
 
-    private final MatriculaService matriculaService;
+    private final MatriculaServiceImpl matriculaServiceImpl;
 
-    @Inject
-    public MatriculaControllerImpl(MatriculaService matriculaService) {
-        this.matriculaService = matriculaService;
+    public MatriculaControllerImpl(MatriculaServiceImpl matriculaServiceImpl) {
+        this.matriculaServiceImpl = matriculaServiceImpl;
     }
 
     @Override
-    public void matricular(Matricula matricula) {
-        matriculaService.matricular(matricula);
+    public MatriculaOutputDTO cadastrar(MatriculaInputDTO dto) {
+        return MatriculaMapper.toOutputDTO(matriculaServiceImpl.cadastrar(MatriculaMapper.toEntity(dto)));
     }
 
     @Override
-    public List<Matricula> listarPorUsuario(Long usuarioId) {
-        return matriculaService.listarPorUsuario(usuarioId);
+    public List<MatriculaOutputDTO> listarTodas() {
+        return MatriculaMapper.toOutputList(matriculaServiceImpl.listarTodas());
     }
 
     @Override
-    public void atualizarProgresso(Long id, Integer progresso) {
-        matriculaService.atualizarProgresso(id, progresso);
+    public List<MatriculaOutputDTO> listarPorUsuario(int usuarioId) {
+        return MatriculaMapper.toOutputList(matriculaServiceImpl.listarPorUsuario(usuarioId));
+    }
+
+    @Override
+    public void deletar(int id) {
+        matriculaServiceImpl.deletar(id);
     }
 }

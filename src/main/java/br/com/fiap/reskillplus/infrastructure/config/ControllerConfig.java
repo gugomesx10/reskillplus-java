@@ -1,39 +1,35 @@
 package br.com.fiap.reskillplus.infrastructure.config;
 
-import br.com.fiap.reskillplus.domain.service.*;
+import br.com.fiap.reskillplus.application.*;
 import br.com.fiap.reskillplus.interfaces.*;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class ControllerConfig {
 
-    @ApplicationScoped
-    public CursoController cursoController(CursoService cursoService) {
-        return new CursoControllerImpl(cursoService);
+    @Produces
+    public UsuarioController usuarioController(UsuarioServiceImpl usuarioServiceImpl) {
+        return new UsuarioControllerImpl(usuarioServiceImpl);
     }
 
-    @ApplicationScoped
-    public FeedbackController feedbackController(FeedbackService feedbackService) {
-        return new FeedbackControllerImpl(feedbackService);
+    @Produces
+    public CursoController cursoController(CursoServiceImpl cursoServiceImpl) {
+        return new CursoControllerImpl(cursoServiceImpl);
     }
 
-    @ApplicationScoped
-    public HabilidadeController habilidadeController(HabilidadeService habilidadeService) {
-        return new HabilidadeControllerImpl(habilidadeService);
+    @Produces
+    public MatriculaController matriculaController(MatriculaServiceImpl matriculaServiceImpl) {
+        return new MatriculaControllerImpl(matriculaServiceImpl);
     }
 
-    @ApplicationScoped
-    public MatriculaController matriculaController(MatriculaService matriculaService) {
-        return new MatriculaControllerImpl(matriculaService);
+    @Produces
+    public HabilidadeController habilidadeController(HabilidadeServiceImpl habilidadeServiceImpl) {
+        return new HabilidadeControllerImpl(habilidadeServiceImpl);
     }
 
-    @ApplicationScoped
-    public RecomendacaoController recomendacaoController(RecomendacaoService recomendacaoService) {
-        return new RecomendacaoControllerImpl(recomendacaoService);
-    }
-
-    @ApplicationScoped
-    public UsuarioController usuarioController(UsuarioService usuarioService) {
-        return new UsuarioControllerImpl(usuarioService);
+    @Produces
+    public RecomendacaoController recomendacaoController(RecomendacaoServiceImpl recomendacaoServiceImpl) {
+        return new RecomendacaoControllerImpl(recomendacaoServiceImpl);
     }
 }

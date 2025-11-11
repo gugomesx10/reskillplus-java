@@ -1,25 +1,35 @@
 package br.com.fiap.reskillplus.mapper;
 
 import br.com.fiap.reskillplus.domain.model.Curso;
-import br.com.fiap.reskillplus.dto.input.CursoInputDto;
-import br.com.fiap.reskillplus.dto.output.CursoOutputDto;
-import java.time.LocalDateTime;
+import br.com.fiap.reskillplus.dto.input.CursoInputDTO;
+import br.com.fiap.reskillplus.dto.output.CursoOutputDTO;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CursoMapper {
 
-    public static Curso toEntity(CursoInputDto dto) {
-        return new Curso(null, dto.titulo, dto.descricao, dto.categoria, dto.duracaoHoras, dto.nivel, LocalDateTime.now());
+    public static Curso toEntity(CursoInputDTO dto) {
+        return new Curso(
+                0,
+                dto.getTitulo(),
+                dto.getDescricao(),
+                dto.getCategoria(),
+                dto.getCargaHoraria()
+        );
     }
 
-    public static CursoOutputDto toOutput(Curso entity) {
-        CursoOutputDto dto = new CursoOutputDto();
-        dto.id = entity.getId();
-        dto.titulo = entity.getTitulo();
-        dto.descricao = entity.getDescricao();
-        dto.categoria = entity.getCategoria();
-        dto.duracaoHoras = entity.getDuracaoHoras();
-        dto.nivel = entity.getNivel();
-        dto.dataCriacao = entity.getDataCriacao();
-        return dto;
+    public static CursoOutputDTO toOutputDTO(Curso entity) {
+        if (entity == null) return null;
+        return new CursoOutputDTO(
+                entity.getId(),
+                entity.getTitulo(),
+                entity.getDescricao(),
+                entity.getCategoria(),
+                entity.getCargaHoraria()
+        );
+    }
+
+    public static List<CursoOutputDTO> toOutputList(List<Curso> entities) {
+        return entities.stream().map(CursoMapper::toOutputDTO).collect(Collectors.toList());
     }
 }

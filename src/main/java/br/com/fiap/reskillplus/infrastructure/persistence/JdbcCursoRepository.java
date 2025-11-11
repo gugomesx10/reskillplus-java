@@ -2,114 +2,104 @@ package br.com.fiap.reskillplus.infrastructure.persistence;
 
 import br.com.fiap.reskillplus.domain.model.Curso;
 import br.com.fiap.reskillplus.domain.repository.CursoRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import br.com.fiap.reskillplus.infrastructure.exceptions.CursoException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApplicationScoped
 public class JdbcCursoRepository implements CursoRepository {
 
-    @Inject
-    DatabaseConnection databaseConnection;
+    private final DatabaseConnection databaseConnection;
 
     public JdbcCursoRepository(DatabaseConnection databaseConnection) {
+        this.databaseConnection = databaseConnection;
     }
 
     @Override
     public void salvar(Curso curso) {
-        String sql = "INSERT INTO CURSO (TITULO, DESCRICAO, CATEGORIA, DURACAOHORAS, NIVEL, DATACRIACAO) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cursos (titulo, descricao, categoria, carga_horaria) VALUES (?, ?, ?, ?)";
         try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, curso.getTitulo());
-            ps.setString(2, curso.getDescricao());
-            ps.setString(3, curso.getCategoria());
-            ps.setInt(4, curso.getDuracaoHoras());
-            ps.setString(5, curso.getNivel());
-            ps.setTimestamp(6, Timestamp.valueOf(curso.getDataCriacao()));
-            ps.executeUpdate();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, curso.getTitulo());
+            stmt.setString(2, curso.getDescricao());
+            stmt.setString(3, curso.getCategoria());
+            stmt.setInt(4, curso.getCargaHoraria());
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar curso: " + e.getMessage(), e);
+            throw new CursoException("Erro ao salvar curso", e);
+        }
+    }
+
+    @Override
+    public void atualizar(Curso curso) {
+        String sql = "UPDATE cursos SET titulo=?, descricao=?, categoria=?, carga_horaria=? WHERE id=?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, curso.getTitulo());
+            stmt.setString(2, curso.getDescricao());
+            stmt.setString(3, curso.getCategoria());
+            stmt.setInt(4, curso.getCargaHoraria());
+            stmt.setInt(5, curso.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new CursoException("Erro ao atualizar curso", e);
+        }
+    }
+
+    @Override
+    public void deletar(int id) {
+        String sql = "DELETE FROM cursos WHERE id=?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new CursoException("Erro ao deletar curso", e);
+        }
+    }
+
+    @Override
+    public Curso buscarPorId(int id) {
+        String sql = "SELECT * FROM cursos WHERE id=?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Curso(
+                        rs.getInt("id"),
+                        rs.getString("titulo"),
+                        rs.getString("descricao"),
+                        rs.getString("categoria"),
+                        rs.getInt("carga_horaria")
+                );
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new CursoException("Erro ao buscar curso", e);
         }
     }
 
     @Override
     public List<Curso> listarTodos() {
         List<Curso> cursos = new ArrayList<>();
-        String sql = "SELECT * FROM CURSO";
+        String sql = "SELECT * FROM cursos";
         try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Curso curso = new Curso(
-                        rs.getLong("ID"),
-                        rs.getString("TITULO"),
-                        rs.getString("DESCRICAO"),
-                        rs.getString("CATEGORIA"),
-                        rs.getInt("DURACAOHORAS"),
-                        rs.getString("NIVEL"),
-                        rs.getTimestamp("DATACRIACAO").toLocalDateTime()
-                );
-                cursos.add(curso);
+                cursos.add(new Curso(
+                        rs.getInt("id"),
+                        rs.getString("titulo"),
+                        rs.getString("descricao"),
+                        rs.getString("categoria"),
+                        rs.getInt("carga_horaria")
+                ));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar cursos: " + e.getMessage(), e);
+            throw new CursoException("Erro ao listar cursos", e);
         }
         return cursos;
-    }
-
-    @Override
-    public Curso buscarPorId(Long id) {
-        String sql = "SELECT * FROM CURSO WHERE ID = ?";
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Curso(
-                            rs.getLong("ID"),
-                            rs.getString("TITULO"),
-                            rs.getString("DESCRICAO"),
-                            rs.getString("CATEGORIA"),
-                            rs.getInt("DURACAOHORAS"),
-                            rs.getString("NIVEL"),
-                            rs.getTimestamp("DATACRIACAO").toLocalDateTime()
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar curso por ID: " + e.getMessage(), e);
-        }
-        return null;
-    }
-
-    @Override
-    public void atualizar(Curso curso) {
-        String sql = "UPDATE CURSO SET TITULO=?, DESCRICAO=?, CATEGORIA=?, DURACAOHORAS=?, NIVEL=? WHERE ID=?";
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, curso.getTitulo());
-            ps.setString(2, curso.getDescricao());
-            ps.setString(3, curso.getCategoria());
-            ps.setInt(4, curso.getDuracaoHoras());
-            ps.setString(5, curso.getNivel());
-            ps.setLong(6, curso.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar curso: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void deletar(Long id) {
-        String sql = "DELETE FROM CURSO WHERE ID = ?";
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar curso: " + e.getMessage(), e);
-        }
     }
 }

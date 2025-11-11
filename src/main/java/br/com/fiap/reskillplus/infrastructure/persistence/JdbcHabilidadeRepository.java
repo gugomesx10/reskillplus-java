@@ -2,77 +2,100 @@ package br.com.fiap.reskillplus.infrastructure.persistence;
 
 import br.com.fiap.reskillplus.domain.model.Habilidade;
 import br.com.fiap.reskillplus.domain.repository.HabilidadeRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import br.com.fiap.reskillplus.infrastructure.exceptions.HabilidadeException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApplicationScoped
 public class JdbcHabilidadeRepository implements HabilidadeRepository {
 
-    @Inject
-    DatabaseConnection databaseConnection;
+    private final DatabaseConnection databaseConnection;
 
     public JdbcHabilidadeRepository(DatabaseConnection databaseConnection) {
+        this.databaseConnection = databaseConnection;
     }
 
     @Override
     public void salvar(Habilidade habilidade) {
-        String sql = "INSERT INTO HABILIDADE (USUARIOID, NOMEHABILIDADE, NIVELPROFICIENCIA) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO habilidades (nome, descricao, nivel) VALUES (?, ?, ?)";
         try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, habilidade.getUsuarioId());
-            ps.setString(2, habilidade.getNomeHabilidade());
-            ps.setInt(3, habilidade.getNivelProficiencia());
-            ps.executeUpdate();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, habilidade.getNome());
+            stmt.setString(2, habilidade.getDescricao());
+            stmt.setString(3, habilidade.getNivel());
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar habilidade: " + e.getMessage(), e);
+            throw new HabilidadeException("Erro ao salvar habilidade", e);
         }
-    }
-
-    @Override
-    public Habilidade buscarPorId(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<Habilidade> listarPorUsuario(Long usuarioId) {
-        List<Habilidade> lista = new ArrayList<>();
-        String sql = "SELECT * FROM HABILIDADE WHERE USUARIOID = ?";
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, usuarioId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(new Habilidade(
-                            rs.getLong("ID"),
-                            rs.getLong("USUARIOID"),
-                            rs.getString("NOMEHABILIDADE"),
-                            rs.getInt("NIVELPROFICIENCIA")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar habilidades: " + e.getMessage(), e);
-        }
-        return lista;
     }
 
     @Override
     public void atualizar(Habilidade habilidade) {
-
+        String sql = "UPDATE habilidades SET nome=?, descricao=?, nivel=? WHERE id=?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, habilidade.getNome());
+            stmt.setString(2, habilidade.getDescricao());
+            stmt.setString(3, habilidade.getNivel());
+            stmt.setInt(4, habilidade.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new HabilidadeException("Erro ao atualizar habilidade", e);
+        }
     }
 
     @Override
-    public void deletar(Long id) {
-        String sql = "DELETE FROM HABILIDADE WHERE ID = ?";
+    public void deletar(int id) {
+        String sql = "DELETE FROM habilidades WHERE id=?";
         try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            ps.executeUpdate();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar habilidade: " + e.getMessage(), e);
+            throw new HabilidadeException("Erro ao deletar habilidade", e);
         }
+    }
+
+    @Override
+    public Habilidade buscarPorId(int id) {
+        String sql = "SELECT * FROM habilidades WHERE id=?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Habilidade(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descricao"),
+                        rs.getString("nivel")
+                );
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new HabilidadeException("Erro ao buscar habilidade", e);
+        }
+    }
+
+    @Override
+    public List<Habilidade> listarTodas() {
+        List<Habilidade> habilidades = new ArrayList<>();
+        String sql = "SELECT * FROM habilidades";
+        try (Connection conn = databaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                habilidades.add(new Habilidade(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descricao"),
+                        rs.getString("nivel")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new HabilidadeException("Erro ao listar habilidades", e);
+        }
+        return habilidades;
     }
 }

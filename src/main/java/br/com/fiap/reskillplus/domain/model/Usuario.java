@@ -1,55 +1,59 @@
 package br.com.fiap.reskillplus.domain.model;
 
-import java.time.LocalDateTime;
+import java.util.Objects;
 
-/**
- * Entidade de domínio Usuario
- * Representa um usuário no sistema ReSkill+
- *
- * @author Gustavo Gomes Martins - RM555999
- */
 public class Usuario {
-    private Long id;
+
+    private int id;
     private String nome;
     private String email;
     private String senha;
-    private String nivelEducacao;
-    private String areasInteresse;
-    private LocalDateTime dataCriacao;
+    private String papel;
 
-    // Construtores
     public Usuario() {}
 
-    public Usuario(Long id, String nome, String email, String senha,
-                   String nivelEducacao, String areasInteresse, LocalDateTime dataCriacao) {
+    public Usuario(int id, String nome, String email, String senha, String papel) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.nivelEducacao = nivelEducacao;
-        this.areasInteresse = areasInteresse;
-        this.dataCriacao = dataCriacao;
+        this.papel = papel;
     }
 
-    // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Usuario(String nome, String email, String senha, String papel) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.papel = papel;
+    }
 
+    public int getId() { return id; }
     public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-
     public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
     public String getSenha() { return senha; }
+    public String getPapel() { return papel; }
+
+    public void setId(int id) { this.id = id; }
+    public void setNome(String nome) { this.nome = nome; }
+    public void setEmail(String email) { this.email = email; }
     public void setSenha(String senha) { this.senha = senha; }
+    public void setPapel(String papel) { this.papel = papel; }
 
-    public String getNivelEducacao() { return nivelEducacao; }
-    public void setNivelEducacao(String nivelEducacao) { this.nivelEducacao = nivelEducacao; }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Usuario)) return false;
+        Usuario usuario = (Usuario) o;
+        return id == usuario.id && Objects.equals(email, usuario.email);
+    }
 
-    public String getAreasInteresse() { return areasInteresse; }
-    public void setAreasInteresse(String areasInteresse) { this.areasInteresse = areasInteresse; }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
+    }
 
-    public LocalDateTime getDataCriacao() { return dataCriacao; }
-    public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
+    @Override
+    public String toString() {
+        return "Usuario{id=" + id + ", nome='" + nome + "', email='" + email + "', papel='" + papel + "'}";
+    }
 }

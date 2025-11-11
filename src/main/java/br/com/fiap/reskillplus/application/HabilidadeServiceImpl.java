@@ -2,32 +2,43 @@ package br.com.fiap.reskillplus.application;
 
 import br.com.fiap.reskillplus.domain.model.Habilidade;
 import br.com.fiap.reskillplus.domain.repository.HabilidadeRepository;
-import br.com.fiap.reskillplus.domain.service.HabilidadeService;
+import br.com.fiap.reskillplus.domain.service.HabilidadeDomainService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
-public class HabilidadeServiceImpl implements HabilidadeService {
+public class HabilidadeServiceImpl {
 
     @Inject
-    HabilidadeRepository habilidadeRepository;
+    HabilidadeRepository repository;
+
+    @Inject
+    HabilidadeDomainService domainService;
 
     public HabilidadeServiceImpl(HabilidadeRepository habilidadeRepository) {
     }
 
-    @Override
-    public void adicionar(Habilidade habilidade) {
-        habilidadeRepository.salvar(habilidade);
+    public Habilidade cadastrar(Habilidade habilidade) {
+        if (!domainService.validarHabilidade(habilidade))
+            throw new IllegalArgumentException("Habilidade inválida.");
+        repository.salvar(habilidade);
+        return habilidade;
     }
 
-    @Override
-    public List<Habilidade> listarPorUsuario(Long usuarioId) {
-        return habilidadeRepository.listarPorUsuario(usuarioId);
+    public List<Habilidade> listarTodas() {
+        return repository.listarTodas();
     }
 
-    @Override
-    public void remover(Long id) {
-        habilidadeRepository.deletar(id);
+    public Habilidade buscarPorId(int id) {
+        return repository.buscarPorId(id);
+    }
+
+    public void atualizar(Habilidade habilidade) {
+        repository.atualizar(habilidade);
+    }
+
+    public void deletar(int id) {
+        repository.deletar(id);
     }
 }

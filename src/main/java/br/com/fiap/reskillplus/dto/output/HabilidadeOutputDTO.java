@@ -1,17 +1,13 @@
-package br.com.fiap.reskillplus.domain.model;
+package br.com.fiap.reskillplus.dto.output;
 
-import java.util.Objects;
-
-public class Habilidade {
+public class HabilidadeOutputDTO {
 
     private int id;
     private String nome;
     private String descricao;
     private String nivel;
 
-    public Habilidade() {}
-
-    public Habilidade(int id, String nome, String descricao, String nivel) {
+    public HabilidadeOutputDTO(int id, String nome, String descricao, String nivel) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -27,17 +23,4 @@ public class Habilidade {
     public void setNome(String nome) { this.nome = nome; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public void setNivel(String nivel) { this.nivel = nivel; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Habilidade)) return false;
-        Habilidade that = (Habilidade) o;
-        return id == that.id && Objects.equals(nome, that.nome);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome);
-    }
 }

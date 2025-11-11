@@ -1,10 +1,12 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.domain.model.Usuario;
+import br.com.fiap.reskillplus.dto.input.UsuarioInputDTO;
+import br.com.fiap.reskillplus.dto.output.UsuarioOutputDTO;
 import java.util.List;
 
 public interface UsuarioController {
-    void criarUsuario(Usuario usuario);
-    List<Usuario> listarUsuarios();
-    Usuario buscarPorEmail(String email);
+    UsuarioOutputDTO cadastrar(UsuarioInputDTO dto);
+    UsuarioOutputDTO buscarPorId(int id);
+    List<UsuarioOutputDTO> listarTodos();
+    void deletar(int id);
 }
