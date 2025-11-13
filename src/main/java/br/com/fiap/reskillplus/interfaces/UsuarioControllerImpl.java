@@ -4,10 +4,10 @@ import br.com.fiap.reskillplus.domain.service.UsuarioService;
 import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 import br.com.fiap.reskillplus.domain.model.Usuario;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Vetoed;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
+@Vetoed
 public class UsuarioControllerImpl implements UsuarioController {
 
     private final UsuarioService usuarioService;

@@ -4,10 +4,10 @@ import br.com.fiap.reskillplus.domain.model.Matricula;
 import br.com.fiap.reskillplus.domain.service.MatriculaService;
 import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Vetoed;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
+@Vetoed
 public class MatriculaControllerImpl implements MatriculaController {
 
     private final MatriculaService matriculaService;

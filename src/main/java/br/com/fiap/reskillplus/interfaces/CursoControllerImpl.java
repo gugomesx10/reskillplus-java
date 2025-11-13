@@ -4,10 +4,10 @@ import br.com.fiap.reskillplus.domain.model.Curso;
 import br.com.fiap.reskillplus.domain.service.CursoService;
 import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Vetoed;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
+@Vetoed
 public class CursoControllerImpl implements CursoController {
 
     private final CursoService cursoService;

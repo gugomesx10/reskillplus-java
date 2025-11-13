@@ -4,10 +4,10 @@ import br.com.fiap.reskillplus.domain.model.Habilidade;
 import br.com.fiap.reskillplus.domain.service.HabilidadeService;
 import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Vetoed;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
+@Vetoed
 public class HabilidadeControllerImpl implements HabilidadeController {
 
     private final HabilidadeService habilidadeService;

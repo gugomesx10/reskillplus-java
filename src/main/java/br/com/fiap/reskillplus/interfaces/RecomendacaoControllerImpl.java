@@ -4,10 +4,10 @@ import br.com.fiap.reskillplus.domain.model.Recomendacao;
 import br.com.fiap.reskillplus.domain.service.RecomendacaoService;
 import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Vetoed;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
+@Vetoed
 public class RecomendacaoControllerImpl implements RecomendacaoController {
 
     private final RecomendacaoService recomendacaoService;
