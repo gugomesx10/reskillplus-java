@@ -1,35 +1,33 @@
 package br.com.fiap.reskillplus.mapper;
 
-import br.com.fiap.reskillplus.domain.model.Matricula;
 import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
 import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
-import java.util.List;
-import java.util.stream.Collectors;
+import br.com.fiap.reskillplus.domain.model.Matricula;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class MatriculaMapper {
 
-    public static Matricula toEntity(MatriculaInputDTO dto) {
+    public Matricula toModel(MatriculaInputDTO dto) {
+        if (dto == null) return null;
+
         return new Matricula(
-                0,
-                dto.getUsuarioId(),
-                dto.getCursoId(),
-                dto.getDataMatricula(),
-                dto.isConcluido()
+                dto.getCpf_usuario(),
+                dto.getNome_curso(),
+                dto.getDt_matricula(),
+                dto.getStatus()
         );
     }
 
-    public static MatriculaOutputDTO toOutputDTO(Matricula entity) {
-        if (entity == null) return null;
+    public MatriculaOutputDTO toOutputDTO(Matricula model) {
+        if (model == null) return null;
+
         return new MatriculaOutputDTO(
-                entity.getId(),
-                entity.getUsuarioId(),
-                entity.getCursoId(),
-                entity.getDataMatricula(),
-                entity.isConcluido()
+                model.getCpf_usuario(),
+                model.getNome_curso(),
+                model.getDt_matricula(),
+                model.getStatus()
         );
-    }
-
-    public static List<MatriculaOutputDTO> toOutputList(List<Matricula> entities) {
-        return entities.stream().map(MatriculaMapper::toOutputDTO).collect(Collectors.toList());
     }
 }

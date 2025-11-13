@@ -1,35 +1,53 @@
 package br.com.fiap.reskillplus.infrastructure.config;
 
-import br.com.fiap.reskillplus.application.*;
-import br.com.fiap.reskillplus.interfaces.*;
+import br.com.fiap.reskillplus.domain.service.UsuarioService;
+import br.com.fiap.reskillplus.domain.service.CursoService;
+import br.com.fiap.reskillplus.domain.service.HabilidadeService;
+import br.com.fiap.reskillplus.domain.service.MatriculaService;
+import br.com.fiap.reskillplus.domain.service.RecomendacaoService;
+
+import br.com.fiap.reskillplus.interfaces.UsuarioController;
+import br.com.fiap.reskillplus.interfaces.UsuarioControllerImpl;
+
+import br.com.fiap.reskillplus.interfaces.CursoController;
+import br.com.fiap.reskillplus.interfaces.CursoControllerImpl;
+
+import br.com.fiap.reskillplus.interfaces.HabilidadeController;
+import br.com.fiap.reskillplus.interfaces.HabilidadeControllerImpl;
+
+import br.com.fiap.reskillplus.interfaces.MatriculaController;
+import br.com.fiap.reskillplus.interfaces.MatriculaControllerImpl;
+
+import br.com.fiap.reskillplus.interfaces.RecomendacaoController;
+import br.com.fiap.reskillplus.interfaces.RecomendacaoControllerImpl;
+
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class ControllerConfig {
 
-    @Produces
-    public UsuarioController usuarioController(UsuarioServiceImpl usuarioServiceImpl) {
-        return new UsuarioControllerImpl(usuarioServiceImpl);
+    @ApplicationScoped
+    public UsuarioController usuarioController(UsuarioService usuarioService) {
+        return new UsuarioControllerImpl(usuarioService);
     }
 
-    @Produces
-    public CursoController cursoController(CursoServiceImpl cursoServiceImpl) {
-        return new CursoControllerImpl(cursoServiceImpl);
+    @ApplicationScoped
+    public CursoController cursoController(CursoService cursoService) {
+        return new CursoControllerImpl(cursoService);
     }
 
-    @Produces
-    public MatriculaController matriculaController(MatriculaServiceImpl matriculaServiceImpl) {
-        return new MatriculaControllerImpl(matriculaServiceImpl);
+    @ApplicationScoped
+    public HabilidadeController habilidadeController(HabilidadeService habilidadeService) {
+        return new HabilidadeControllerImpl(habilidadeService);
     }
 
-    @Produces
-    public HabilidadeController habilidadeController(HabilidadeServiceImpl habilidadeServiceImpl) {
-        return new HabilidadeControllerImpl(habilidadeServiceImpl);
+    @ApplicationScoped
+    public MatriculaController matriculaController(MatriculaService matriculaService) {
+        return new MatriculaControllerImpl(matriculaService);
     }
 
-    @Produces
-    public RecomendacaoController recomendacaoController(RecomendacaoServiceImpl recomendacaoServiceImpl) {
-        return new RecomendacaoControllerImpl(recomendacaoServiceImpl);
+    @ApplicationScoped
+    public RecomendacaoController recomendacaoController(RecomendacaoService recomendacaoService) {
+        return new RecomendacaoControllerImpl(recomendacaoService);
     }
 }

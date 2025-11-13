@@ -2,12 +2,14 @@ package br.com.fiap.reskillplus.infrastructure.api.rest;
 
 import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
 import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
+import br.com.fiap.reskillplus.mapper.MatriculaMapper;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+import br.com.fiap.reskillplus.domain.model.Matricula;
 import br.com.fiap.reskillplus.interfaces.MatriculaController;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
-import java.util.Map;
 
 @Path("/matricula")
 @Produces(MediaType.APPLICATION_JSON)
@@ -15,40 +17,50 @@ import java.util.Map;
 public class MatriculaRestController {
 
     private final MatriculaController matriculaController;
+    private final MatriculaMapper matriculaMapper;
 
-    public MatriculaRestController(MatriculaController matriculaController) {
+    @Inject
+    public MatriculaRestController(MatriculaController matriculaController,
+                                   MatriculaMapper matriculaMapper) {
         this.matriculaController = matriculaController;
+        this.matriculaMapper = matriculaMapper;
     }
 
     @POST
-    public Response cadastrar(MatriculaInputDTO dto) {
+    public Response criarMatricula(MatriculaInputDTO dto) {
         try {
-            MatriculaOutputDTO saida = matriculaController.cadastrar(dto);
-            return Response.status(Response.Status.CREATED).entity(saida).build();
+            Matricula matricula = matriculaMapper.toModel(dto);
+            Matricula criada = matriculaController.criarMatricula(matricula);
+            MatriculaOutputDTO output = matriculaMapper.toOutputDTO(criada);
+
+            return Response.status(Response.Status.CREATED).entity(output).build();
         } catch (RuntimeException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("erro", e.getMessage()))
-                    .build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
     @GET
-    public Response listarTodas() {
-        List<MatriculaOutputDTO> matriculas = matriculaController.listarTodas();
-        return Response.ok(matriculas).build();
-    }
-
-    @GET
-    @Path("/usuario/{usuarioId}")
-    public Response listarPorUsuario(@PathParam("usuarioId") int usuarioId) {
-        List<MatriculaOutputDTO> matriculas = matriculaController.listarPorUsuario(usuarioId);
-        return Response.ok(matriculas).build();
+    @Path("/buscar/{cpf}/{curso}")
+    public Response buscarMatricula(@PathParam("cpf") String cpf,
+                                    @PathParam("curso") String curso) {
+        try {
+            Matricula matricula = matriculaController.buscarMatricula(cpf, curso);
+            MatriculaOutputDTO output = matriculaMapper.toOutputDTO(matricula);
+            return Response.ok(output).build();
+        } catch (RuntimeException | EntidadeNaoLocalizada e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @DELETE
-    @Path("/{id}")
-    public Response deletar(@PathParam("id") int id) {
-        matriculaController.deletar(id);
-        return Response.noContent().build();
+    @Path("/excluir/{cpf}/{curso}")
+    public Response excluirMatricula(@PathParam("cpf") String cpf,
+                                     @PathParam("curso") String curso) {
+        try {
+            matriculaController.excluirMatricula(cpf, curso);
+            return Response.noContent().build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

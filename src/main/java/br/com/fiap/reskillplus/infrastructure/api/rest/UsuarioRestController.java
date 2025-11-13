@@ -2,13 +2,14 @@ package br.com.fiap.reskillplus.infrastructure.api.rest;
 
 import br.com.fiap.reskillplus.dto.input.UsuarioInputDTO;
 import br.com.fiap.reskillplus.dto.output.UsuarioOutputDTO;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+import br.com.fiap.reskillplus.domain.model.Usuario;
 import br.com.fiap.reskillplus.interfaces.UsuarioController;
 import br.com.fiap.reskillplus.mapper.UsuarioMapper;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
-import java.util.Map;
+import jakarta.inject.Inject;
 
 @Path("/usuario")
 @Produces(MediaType.APPLICATION_JSON)
@@ -16,42 +17,71 @@ import java.util.Map;
 public class UsuarioRestController {
 
     private final UsuarioController usuarioController;
+    private final UsuarioMapper usuarioMapper;
 
-    public UsuarioRestController(UsuarioController usuarioController) {
+    @Inject
+    public UsuarioRestController(UsuarioController usuarioController,
+                                 UsuarioMapper usuarioMapper) {
         this.usuarioController = usuarioController;
+        this.usuarioMapper = usuarioMapper;
     }
 
     @POST
-    public Response cadastrar(UsuarioInputDTO dto) {
+    public Response criarUsuario(UsuarioInputDTO usuarioInputDTO) {
         try {
-            UsuarioOutputDTO saida = usuarioController.cadastrar(dto);
-            return Response.status(Response.Status.CREATED).entity(saida).build();
+            Usuario usuario = usuarioMapper.toModel(usuarioInputDTO);
+            Usuario criado = usuarioController.criarUsuario(usuario);
+            UsuarioOutputDTO output = usuarioMapper.toOutputDTO(criado);
+
+            return Response.status(Response.Status.CREATED).entity(output).build();
         } catch (RuntimeException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("erro", e.getMessage()))
-                    .build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    public Response editarUsuario(UsuarioInputDTO usuarioInputDTO) {
+        try {
+            Usuario usuario = usuarioMapper.toModel(usuarioInputDTO);
+            usuarioController.editarUsuario(usuario);
+            return Response.status(Response.Status.ACCEPTED).build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
     @GET
-    public Response listarTodos() {
-        List<UsuarioOutputDTO> usuarios = usuarioController.listarTodos();
-        return Response.ok(usuarios).build();
+    @Path("/buscar/{cpf}")
+    public Response buscarUsuario(@PathParam("cpf") String cpf) {
+        try {
+            Usuario usuario = usuarioController.buscarUsuario(cpf);
+            UsuarioOutputDTO output = usuarioMapper.toOutputDTO(usuario);
+            return Response.ok(output).build();
+        } catch (RuntimeException | EntidadeNaoLocalizada e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @GET
-    @Path("/{id}")
-    public Response buscarPorId(@PathParam("id") int id) {
-        UsuarioOutputDTO usuario = usuarioController.buscarPorId(id);
-        if (usuario == null)
+    @Path("/validar/{cpf}/{senha}")
+    public Response validarUsuario(@PathParam("cpf") String cpf, @PathParam("senha") String senha) {
+        try {
+            Usuario usuario = usuarioController.validarUsuario(cpf, senha);
+            UsuarioOutputDTO output = usuarioMapper.toOutputDTO(usuario);
+            return Response.ok(output).build();
+        } catch (RuntimeException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(usuario).build();
+        }
     }
 
     @DELETE
-    @Path("/{id}")
-    public Response deletar(@PathParam("id") int id) {
-        usuarioController.deletar(id);
-        return Response.noContent().build();
+    @Path("/excluir/{cpf}")
+    public Response excluirUsuario(@PathParam("cpf") String cpf) {
+        try {
+            usuarioController.excluirUsuario(cpf);
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

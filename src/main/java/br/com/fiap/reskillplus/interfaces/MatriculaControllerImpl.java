@@ -1,38 +1,40 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.application.MatriculaServiceImpl;
-import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
-import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
-import br.com.fiap.reskillplus.mapper.MatriculaMapper;
+import br.com.fiap.reskillplus.domain.model.Matricula;
+import br.com.fiap.reskillplus.domain.service.MatriculaService;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class MatriculaControllerImpl implements MatriculaController {
 
-    private final MatriculaServiceImpl matriculaServiceImpl;
+    private final MatriculaService matriculaService;
 
-    public MatriculaControllerImpl(MatriculaServiceImpl matriculaServiceImpl) {
-        this.matriculaServiceImpl = matriculaServiceImpl;
+    @Inject
+    public MatriculaControllerImpl(MatriculaService matriculaService) {
+        this.matriculaService = matriculaService;
     }
 
     @Override
-    public MatriculaOutputDTO cadastrar(MatriculaInputDTO dto) {
-        return MatriculaMapper.toOutputDTO(matriculaServiceImpl.cadastrar(MatriculaMapper.toEntity(dto)));
+    public Matricula criarMatricula(Matricula matricula) {
+        return matriculaService.criarMatricula(matricula);
     }
 
     @Override
-    public List<MatriculaOutputDTO> listarTodas() {
-        return MatriculaMapper.toOutputList(matriculaServiceImpl.listarTodas());
+    public void editarMatricula(Matricula matricula) {
+        matriculaService.editarMatricula(matricula);
     }
 
     @Override
-    public List<MatriculaOutputDTO> listarPorUsuario(int usuarioId) {
-        return MatriculaMapper.toOutputList(matriculaServiceImpl.listarPorUsuario(usuarioId));
+    public Matricula buscarMatricula(String cpf, String curso)
+            throws EntidadeNaoLocalizada {
+        return matriculaService.buscarMatricula(cpf, curso);
     }
 
     @Override
-    public void deletar(int id) {
-        matriculaServiceImpl.deletar(id);
+    public void excluirMatricula(String cpf, String curso) {
+        matriculaService.excluirMatricula(cpf, curso);
     }
 }

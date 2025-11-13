@@ -1,40 +1,39 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.application.CursoServiceImpl;
-import br.com.fiap.reskillplus.dto.input.CursoInputDTO;
-import br.com.fiap.reskillplus.dto.output.CursoOutputDTO;
-import br.com.fiap.reskillplus.mapper.CursoMapper;
+import br.com.fiap.reskillplus.domain.model.Curso;
+import br.com.fiap.reskillplus.domain.service.CursoService;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import java.util.List;
 
 @ApplicationScoped
 public class CursoControllerImpl implements CursoController {
 
-    private final CursoServiceImpl cursoServiceImpl;
+    private final CursoService cursoService;
 
     @Inject
-    public CursoControllerImpl(CursoServiceImpl cursoServiceImpl) {
-        this.cursoServiceImpl = cursoServiceImpl;
+    public CursoControllerImpl(CursoService cursoService) {
+        this.cursoService = cursoService;
     }
 
     @Override
-    public CursoOutputDTO cadastrar(CursoInputDTO dto) {
-        return CursoMapper.toOutputDTO(cursoServiceImpl.cadastrar(CursoMapper.toEntity(dto)));
+    public Curso criarCurso(Curso curso) {
+        return cursoService.criarCurso(curso);
     }
 
     @Override
-    public CursoOutputDTO buscarPorId(int id) {
-        return CursoMapper.toOutputDTO(cursoServiceImpl.buscarPorId(id));
+    public void editarCurso(Curso curso) {
+        cursoService.editarCurso(curso);
     }
 
     @Override
-    public List<CursoOutputDTO> listarTodos() {
-        return CursoMapper.toOutputList(cursoServiceImpl.listarTodos());
+    public Curso buscarCurso(String nome) throws EntidadeNaoLocalizada {
+        return cursoService.buscarCurso(nome);
     }
 
     @Override
-    public void deletar(int id) {
-        cursoServiceImpl.deletar(id);
+    public void excluirCurso(String nome) {
+        cursoService.excluirCurso(nome);
     }
 }

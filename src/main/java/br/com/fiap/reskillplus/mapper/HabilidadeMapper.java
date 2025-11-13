@@ -1,33 +1,33 @@
 package br.com.fiap.reskillplus.mapper;
 
-import br.com.fiap.reskillplus.domain.model.Habilidade;
 import br.com.fiap.reskillplus.dto.input.HabilidadeInputDTO;
 import br.com.fiap.reskillplus.dto.output.HabilidadeOutputDTO;
-import java.util.List;
-import java.util.stream.Collectors;
+import br.com.fiap.reskillplus.domain.model.Habilidade;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class HabilidadeMapper {
 
-    public static Habilidade toEntity(HabilidadeInputDTO dto) {
+    public Habilidade toModel(HabilidadeInputDTO dto) {
+        if (dto == null) return null;
+
         return new Habilidade(
-                0,
-                dto.getNome(),
-                dto.getDescricao(),
-                dto.getNivel()
+                dto.getNome_habilidade(),
+                dto.getDescricao_habilidade(),
+                dto.getNivel(),
+                dto.getArea()
         );
     }
 
-    public static HabilidadeOutputDTO toOutputDTO(Habilidade entity) {
-        if (entity == null) return null;
+    public HabilidadeOutputDTO toOutputDTO(Habilidade model) {
+        if (model == null) return null;
+
         return new HabilidadeOutputDTO(
-                entity.getId(),
-                entity.getNome(),
-                entity.getDescricao(),
-                entity.getNivel()
+                model.getNome_habilidade(),
+                model.getDescricao_habilidade(),
+                model.getNivel(),
+                model.getArea()
         );
-    }
-
-    public static List<HabilidadeOutputDTO> toOutputList(List<Habilidade> entities) {
-        return entities.stream().map(HabilidadeMapper::toOutputDTO).collect(Collectors.toList());
     }
 }

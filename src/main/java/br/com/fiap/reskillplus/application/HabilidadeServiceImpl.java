@@ -1,44 +1,51 @@
 package br.com.fiap.reskillplus.application;
 
+import br.com.fiap.reskillplus.application.exceptions.HabilidadeJaExisteException;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 import br.com.fiap.reskillplus.domain.model.Habilidade;
 import br.com.fiap.reskillplus.domain.repository.HabilidadeRepository;
-import br.com.fiap.reskillplus.domain.service.HabilidadeDomainService;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.service.HabilidadeService;
 
-@ApplicationScoped
-public class HabilidadeServiceImpl {
+public class HabilidadeServiceImpl implements HabilidadeService {
 
-    @Inject
-    HabilidadeRepository repository;
-
-    @Inject
-    HabilidadeDomainService domainService;
+    private final HabilidadeRepository habilidadeRepository;
 
     public HabilidadeServiceImpl(HabilidadeRepository habilidadeRepository) {
+        this.habilidadeRepository = habilidadeRepository;
     }
 
-    public Habilidade cadastrar(Habilidade habilidade) {
-        if (!domainService.validarHabilidade(habilidade))
-            throw new IllegalArgumentException("Habilidade inválida.");
-        repository.salvar(habilidade);
-        return habilidade;
+    @Override
+    public Habilidade criarHabilidade(Habilidade habilidade) {
+        try {
+            buscarHabilidade(habilidade.getNome_habilidade());
+            throw new HabilidadeJaExisteException("Habilidade já cadastrada");
+        } catch (EntidadeNaoLocalizada e) {
+            return habilidadeRepository.criarHabilidade(habilidade);
+        }
     }
 
-    public List<Habilidade> listarTodas() {
-        return repository.listarTodas();
+    @Override
+    public void editarHabilidade(Habilidade habilidade) {
+        try {
+            buscarHabilidade(habilidade.getNome_habilidade());
+            habilidadeRepository.editarHabilidade(habilidade);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Habilidade não encontrada");
+        }
     }
 
-    public Habilidade buscarPorId(int id) {
-        return repository.buscarPorId(id);
+    @Override
+    public Habilidade buscarHabilidade(String nome) throws EntidadeNaoLocalizada {
+        return habilidadeRepository.buscarHabilidade(nome);
     }
 
-    public void atualizar(Habilidade habilidade) {
-        repository.atualizar(habilidade);
-    }
-
-    public void deletar(int id) {
-        repository.deletar(id);
+    @Override
+    public void excluirHabilidade(String nome) {
+        try {
+            buscarHabilidade(nome);
+            habilidadeRepository.excluirHabilidade(nome);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Habilidade não encontrada");
+        }
     }
 }

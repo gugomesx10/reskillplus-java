@@ -2,12 +2,14 @@ package br.com.fiap.reskillplus.infrastructure.api.rest;
 
 import br.com.fiap.reskillplus.dto.input.RecomendacaoInputDTO;
 import br.com.fiap.reskillplus.dto.output.RecomendacaoOutputDTO;
+import br.com.fiap.reskillplus.mapper.RecomendacaoMapper;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+import br.com.fiap.reskillplus.domain.model.Recomendacao;
 import br.com.fiap.reskillplus.interfaces.RecomendacaoController;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
-import java.util.Map;
 
 @Path("/recomendacao")
 @Produces(MediaType.APPLICATION_JSON)
@@ -15,40 +17,50 @@ import java.util.Map;
 public class RecomendacaoRestController {
 
     private final RecomendacaoController recomendacaoController;
+    private final RecomendacaoMapper recomendacaoMapper;
 
-    public RecomendacaoRestController(RecomendacaoController recomendacaoController) {
+    @Inject
+    public RecomendacaoRestController(RecomendacaoController recomendacaoController,
+                                      RecomendacaoMapper recomendacaoMapper) {
         this.recomendacaoController = recomendacaoController;
+        this.recomendacaoMapper = recomendacaoMapper;
     }
 
     @POST
-    public Response gerar(RecomendacaoInputDTO dto) {
+    public Response criarRecomendacao(RecomendacaoInputDTO dto) {
         try {
-            RecomendacaoOutputDTO saida = recomendacaoController.gerar(dto);
-            return Response.status(Response.Status.CREATED).entity(saida).build();
+            Recomendacao rec = recomendacaoMapper.toModel(dto);
+            Recomendacao criada = recomendacaoController.criarRecomendacao(rec);
+            RecomendacaoOutputDTO output = recomendacaoMapper.toOutputDTO(criada);
+
+            return Response.status(Response.Status.CREATED).entity(output).build();
         } catch (RuntimeException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("erro", e.getMessage()))
-                    .build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
     @GET
-    public Response listarTodas() {
-        List<RecomendacaoOutputDTO> recomendacoes = recomendacaoController.listarTodas();
-        return Response.ok(recomendacoes).build();
-    }
-
-    @GET
-    @Path("/usuario/{usuarioId}")
-    public Response listarPorUsuario(@PathParam("usuarioId") int usuarioId) {
-        List<RecomendacaoOutputDTO> recomendacoes = recomendacaoController.listarPorUsuario(usuarioId);
-        return Response.ok(recomendacoes).build();
+    @Path("/buscar/{cpf}/{curso}")
+    public Response buscarRecomendacao(@PathParam("cpf") String cpf,
+                                       @PathParam("curso") String curso) {
+        try {
+            Recomendacao rec = recomendacaoController.buscarRecomendacao(cpf, curso);
+            RecomendacaoOutputDTO output = recomendacaoMapper.toOutputDTO(rec);
+            return Response.ok(output).build();
+        } catch (RuntimeException | EntidadeNaoLocalizada e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @DELETE
-    @Path("/{id}")
-    public Response deletar(@PathParam("id") int id) {
-        recomendacaoController.deletar(id);
-        return Response.noContent().build();
+    @Path("/excluir/{cpf}/{curso}")
+    public Response excluirRecomendacao(@PathParam("cpf") String cpf,
+                                        @PathParam("curso") String curso) {
+        try {
+            recomendacaoController.excluirRecomendacao(cpf, curso);
+            return Response.noContent().build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

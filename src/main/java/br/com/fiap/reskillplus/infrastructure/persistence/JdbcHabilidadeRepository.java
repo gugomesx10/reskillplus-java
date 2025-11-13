@@ -1,101 +1,114 @@
 package br.com.fiap.reskillplus.infrastructure.persistence;
 
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 import br.com.fiap.reskillplus.domain.model.Habilidade;
 import br.com.fiap.reskillplus.domain.repository.HabilidadeRepository;
-import br.com.fiap.reskillplus.infrastructure.exceptions.HabilidadeException;
+import br.com.fiap.reskillplus.infrastructure.exceptions.InfraestruturaException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JdbcHabilidadeRepository implements HabilidadeRepository {
 
     private final DatabaseConnection databaseConnection;
 
-    public JdbcHabilidadeRepository(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+    public JdbcHabilidadeRepository(DatabaseConnection connection) {
+        this.databaseConnection = connection;
     }
 
     @Override
-    public void salvar(Habilidade habilidade) {
-        String sql = "INSERT INTO habilidades (nome, descricao, nivel) VALUES (?, ?, ?)";
+    public Habilidade criarHabilidade(Habilidade habilidade) {
+        String sql = """
+            INSERT INTO T_RESKILL_HABILIDADE
+            (nome_habilidade, descricao_habilidade, nivel, area)
+            VALUES (?, ?, ?, ?)
+        """;
+
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, habilidade.getNome());
-            stmt.setString(2, habilidade.getDescricao());
+
+            stmt.setString(1, habilidade.getNome_habilidade());
+            stmt.setString(2, habilidade.getDescricao_habilidade());
             stmt.setString(3, habilidade.getNivel());
+            stmt.setString(4, habilidade.getArea());
+
             stmt.executeUpdate();
+            return habilidade;
+
         } catch (SQLException e) {
-            throw new HabilidadeException("Erro ao salvar habilidade", e);
+            throw new InfraestruturaException("Erro ao criar habilidade: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public void atualizar(Habilidade habilidade) {
-        String sql = "UPDATE habilidades SET nome=?, descricao=?, nivel=? WHERE id=?";
+    public void editarHabilidade(Habilidade habilidade) {
+        String sql = """
+            UPDATE T_RESKILL_HABILIDADE
+            SET descricao_habilidade = ?, nivel = ?, area = ?
+            WHERE nome_habilidade = ?
+        """;
+
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, habilidade.getNome());
-            stmt.setString(2, habilidade.getDescricao());
-            stmt.setString(3, habilidade.getNivel());
-            stmt.setInt(4, habilidade.getId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new HabilidadeException("Erro ao atualizar habilidade", e);
+
+            stmt.setString(1, habilidade.getDescricao_habilidade());
+            stmt.setString(2, habilidade.getNivel());
+            stmt.setString(3, habilidade.getArea());
+            stmt.setString(4, habilidade.getNome_habilidade());
+
+            int updated = stmt.executeUpdate();
+            if (updated == 0)
+                throw new EntidadeNaoLocalizada("Habilidade não encontrada: " + habilidade.getNome_habilidade());
+
+        } catch (SQLException | EntidadeNaoLocalizada e) {
+            throw new InfraestruturaException("Erro ao editar habilidade: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public void deletar(int id) {
-        String sql = "DELETE FROM habilidades WHERE id=?";
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new HabilidadeException("Erro ao deletar habilidade", e);
-        }
-    }
+    public Habilidade buscarHabilidade(String nome) throws EntidadeNaoLocalizada {
+        String sql = """
+            SELECT nome_habilidade, descricao_habilidade, nivel, area
+            FROM T_RESKILL_HABILIDADE
+            WHERE nome_habilidade = ?
+        """;
 
-    @Override
-    public Habilidade buscarPorId(int id) {
-        String sql = "SELECT * FROM habilidades WHERE id=?";
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+
+            stmt.setString(1, nome);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 return new Habilidade(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("descricao"),
-                        rs.getString("nivel")
+                        rs.getString("nome_habilidade"),
+                        rs.getString("descricao_habilidade"),
+                        rs.getString("nivel"),
+                        rs.getString("area")
                 );
             }
-            return null;
+
+            throw new EntidadeNaoLocalizada("Habilidade não encontrada: " + nome);
+
         } catch (SQLException e) {
-            throw new HabilidadeException("Erro ao buscar habilidade", e);
+            throw new InfraestruturaException("Erro ao buscar habilidade: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public List<Habilidade> listarTodas() {
-        List<Habilidade> habilidades = new ArrayList<>();
-        String sql = "SELECT * FROM habilidades";
+    public void excluirHabilidade(String nome) {
+        String sql = "DELETE FROM T_RESKILL_HABILIDADE WHERE nome_habilidade = ?";
+
         try (Connection conn = databaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                habilidades.add(new Habilidade(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("descricao"),
-                        rs.getString("nivel")
-                ));
-            }
-        } catch (SQLException e) {
-            throw new HabilidadeException("Erro ao listar habilidades", e);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+
+            int deleted = stmt.executeUpdate();
+            if (deleted == 0)
+                throw new EntidadeNaoLocalizada("Habilidade não encontrada para exclusão: " + nome);
+
+        } catch (SQLException | EntidadeNaoLocalizada e) {
+            throw new InfraestruturaException("Erro ao excluir habilidade: " + e.getMessage(), e);
         }
-        return habilidades;
     }
 }

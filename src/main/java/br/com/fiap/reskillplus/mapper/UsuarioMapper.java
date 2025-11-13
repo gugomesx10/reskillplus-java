@@ -1,34 +1,36 @@
 package br.com.fiap.reskillplus.mapper;
 
-import br.com.fiap.reskillplus.domain.model.Usuario;
 import br.com.fiap.reskillplus.dto.input.UsuarioInputDTO;
 import br.com.fiap.reskillplus.dto.output.UsuarioOutputDTO;
-import java.util.List;
-import java.util.stream.Collectors;
+import br.com.fiap.reskillplus.domain.model.Usuario;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class UsuarioMapper {
 
-    public static Usuario toEntity(UsuarioInputDTO dto) {
+    public Usuario toModel(UsuarioInputDTO dto) {
+        if (dto == null) return null;
+
         return new Usuario(
-                0, // ID gerado pelo banco
-                dto.getNome(),
-                dto.getEmail(),
+                dto.getNome_usuario(),
+                dto.getCpf_usuario(),
                 dto.getSenha(),
-                dto.getPapel()
+                dto.getDt_nasc(),
+                dto.getEnd_usuario(),
+                dto.getMail_usuario()
         );
     }
 
-    public static UsuarioOutputDTO toOutputDTO(Usuario entity) {
-        if (entity == null) return null;
+    public UsuarioOutputDTO toOutputDTO(Usuario model) {
+        if (model == null) return null;
+
         return new UsuarioOutputDTO(
-                entity.getId(),
-                entity.getNome(),
-                entity.getEmail(),
-                entity.getPapel()
+                model.getNome_usuario(),
+                model.getCpf_usuario(),
+                model.getDt_nasc(),
+                model.getEnd_usuario(),
+                model.getMail_usuario()
         );
-    }
-
-    public static List<UsuarioOutputDTO> toOutputList(List<Usuario> entities) {
-        return entities.stream().map(UsuarioMapper::toOutputDTO).collect(Collectors.toList());
     }
 }

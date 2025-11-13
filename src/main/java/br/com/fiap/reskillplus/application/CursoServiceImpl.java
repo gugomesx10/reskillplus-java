@@ -1,44 +1,51 @@
 package br.com.fiap.reskillplus.application;
 
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+import br.com.fiap.reskillplus.application.exceptions.CursoJaExisteException;
 import br.com.fiap.reskillplus.domain.model.Curso;
 import br.com.fiap.reskillplus.domain.repository.CursoRepository;
-import br.com.fiap.reskillplus.domain.service.CursoDomainService;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.service.CursoService;
 
-@ApplicationScoped
-public class CursoServiceImpl {
+public class CursoServiceImpl implements CursoService {
 
-    @Inject
-    CursoRepository repository;
-
-    @Inject
-    CursoDomainService domainService;
+    private final CursoRepository cursoRepository;
 
     public CursoServiceImpl(CursoRepository cursoRepository) {
+        this.cursoRepository = cursoRepository;
     }
 
-    public Curso cadastrar(Curso curso) {
-        if (!domainService.validarCurso(curso))
-            throw new IllegalArgumentException("Dados do curso inválidos.");
-        repository.salvar(curso);
-        return curso;
+    @Override
+    public Curso criarCurso(Curso curso) {
+        try {
+            buscarCurso(curso.getNome_curso());
+            throw new CursoJaExisteException("Curso já cadastrado");
+        } catch (EntidadeNaoLocalizada e) {
+            return cursoRepository.criarCurso(curso);
+        }
     }
 
-    public List<Curso> listarTodos() {
-        return repository.listarTodos();
+    @Override
+    public void editarCurso(Curso curso) {
+        try {
+            Curso existente = buscarCurso(curso.getNome_curso());
+            cursoRepository.editarCurso(curso);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Curso não encontrado");
+        }
     }
 
-    public Curso buscarPorId(int id) {
-        return repository.buscarPorId(id);
+    @Override
+    public Curso buscarCurso(String nomeCurso) throws EntidadeNaoLocalizada {
+        return cursoRepository.buscarCurso(nomeCurso);
     }
 
-    public void atualizar(Curso curso) {
-        repository.atualizar(curso);
-    }
-
-    public void deletar(int id) {
-        repository.deletar(id);
+    @Override
+    public void excluirCurso(String nomeCurso) {
+        try {
+            Curso existente = buscarCurso(nomeCurso);
+            cursoRepository.excluirCurso(nomeCurso);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Curso não encontrado");
+        }
     }
 }

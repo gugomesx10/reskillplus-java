@@ -1,38 +1,40 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.application.RecomendacaoServiceImpl;
-import br.com.fiap.reskillplus.dto.input.RecomendacaoInputDTO;
-import br.com.fiap.reskillplus.dto.output.RecomendacaoOutputDTO;
-import br.com.fiap.reskillplus.mapper.RecomendacaoMapper;
+import br.com.fiap.reskillplus.domain.model.Recomendacao;
+import br.com.fiap.reskillplus.domain.service.RecomendacaoService;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class RecomendacaoControllerImpl implements RecomendacaoController {
 
-    private final RecomendacaoServiceImpl recomendacaoServiceImpl;
+    private final RecomendacaoService recomendacaoService;
 
-    public RecomendacaoControllerImpl(RecomendacaoServiceImpl recomendacaoServiceImpl) {
-        this.recomendacaoServiceImpl = recomendacaoServiceImpl;
+    @Inject
+    public RecomendacaoControllerImpl(RecomendacaoService recomendacaoService) {
+        this.recomendacaoService = recomendacaoService;
     }
 
     @Override
-    public RecomendacaoOutputDTO gerar(RecomendacaoInputDTO dto) {
-        return RecomendacaoMapper.toOutputDTO(recomendacaoServiceImpl.gerar(RecomendacaoMapper.toEntity(dto)));
+    public Recomendacao criarRecomendacao(Recomendacao recomendacao) {
+        return recomendacaoService.criarRecomendacao(recomendacao);
     }
 
     @Override
-    public List<RecomendacaoOutputDTO> listarTodas() {
-        return RecomendacaoMapper.toOutputList(recomendacaoServiceImpl.listarTodas());
+    public void editarRecomendacao(Recomendacao recomendacao) {
+        recomendacaoService.editarRecomendacao(recomendacao);
     }
 
     @Override
-    public List<RecomendacaoOutputDTO> listarPorUsuario(int usuarioId) {
-        return RecomendacaoMapper.toOutputList(recomendacaoServiceImpl.listarPorUsuario(usuarioId));
+    public Recomendacao buscarRecomendacao(String cpf, String curso)
+            throws EntidadeNaoLocalizada {
+        return recomendacaoService.buscarRecomendacao(cpf, curso);
     }
 
     @Override
-    public void deletar(int id) {
-        recomendacaoServiceImpl.deletar(id);
+    public void excluirRecomendacao(String cpf, String curso) {
+        recomendacaoService.excluirRecomendacao(cpf, curso);
     }
 }

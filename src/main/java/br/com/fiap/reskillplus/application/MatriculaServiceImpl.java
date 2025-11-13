@@ -1,46 +1,51 @@
 package br.com.fiap.reskillplus.application;
 
+import br.com.fiap.reskillplus.application.exceptions.MatriculaJaExisteException;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 import br.com.fiap.reskillplus.domain.model.Matricula;
 import br.com.fiap.reskillplus.domain.repository.MatriculaRepository;
-import br.com.fiap.reskillplus.domain.service.MatriculaDomainService;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.service.MatriculaService;
 
-@ApplicationScoped
-public class MatriculaServiceImpl {
+public class MatriculaServiceImpl implements MatriculaService {
 
-    @Inject
-    MatriculaRepository repository;
-
-    @Inject
-    MatriculaDomainService domainService;
+    private final MatriculaRepository matriculaRepository;
 
     public MatriculaServiceImpl(MatriculaRepository matriculaRepository) {
+        this.matriculaRepository = matriculaRepository;
     }
 
-    public Matricula cadastrar(Matricula matricula) {
-        if (!domainService.podeMatricular(matricula))
-            throw new IllegalArgumentException("Matrícula inválida.");
-        repository.salvar(matricula);
-        return matricula;
+    @Override
+    public Matricula criarMatricula(Matricula matricula) {
+        try {
+            buscarMatricula(matricula.getCpf_usuario(), matricula.getNome_curso());
+            throw new MatriculaJaExisteException("Matrícula já existente");
+        } catch (EntidadeNaoLocalizada e) {
+            return matriculaRepository.criarMatricula(matricula);
+        }
     }
 
-    public void concluir(int id) {
-        Matricula matricula = repository.buscarPorId(id);
-        domainService.concluirCurso(matricula);
-        repository.atualizarProgresso(id, matricula.isConcluido());
+    @Override
+    public void editarMatricula(Matricula matricula) {
+        try {
+            buscarMatricula(matricula.getCpf_usuario(), matricula.getNome_curso());
+            matriculaRepository.editarMatricula(matricula);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Matrícula não encontrada");
+        }
     }
 
-    public List<Matricula> listarTodas() {
-        return repository.listarTodas();
+    @Override
+    public Matricula buscarMatricula(String cpf, String curso) throws EntidadeNaoLocalizada {
+        return matriculaRepository.buscarMatricula(cpf, curso);
     }
 
-    public List<Matricula> listarPorUsuario(int usuarioId) {
-        return repository.listarPorUsuario(usuarioId);
-    }
-
-    public void deletar(int id) {
-        repository.deletar(id);
+    @Override
+    public void excluirMatricula(String cpf, String curso) {
+        try {
+            buscarMatricula(cpf, curso);
+            matriculaRepository.excluirMatricula(cpf, curso);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Matrícula não encontrada");
+        }
     }
 }

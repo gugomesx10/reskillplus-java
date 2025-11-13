@@ -2,25 +2,35 @@ package br.com.fiap.reskillplus.dto.output;
 
 public class UsuarioOutputDTO {
 
-    private int id;
-    private String nome;
-    private String email;
-    private String papel;
+    private String nome_usuario;
+    private String cpf_usuario;
+    private String dt_nasc;
+    private String end_usuario;
+    private String mail_usuario;
 
-    public UsuarioOutputDTO(int id, String nome, String email, String papel) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.papel = papel;
+    public UsuarioOutputDTO() {}
+
+    public UsuarioOutputDTO(String nome_usuario, String cpf_usuario,
+                            String dt_nasc, String end_usuario, String mail_usuario) {
+        this.nome_usuario = nome_usuario;
+        this.cpf_usuario = cpf_usuario;
+        this.dt_nasc = dt_nasc;
+        this.end_usuario = end_usuario;
+        this.mail_usuario = mail_usuario;
     }
 
-    public int getId() { return id; }
-    public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public String getPapel() { return papel; }
+    public String getNome_usuario() { return nome_usuario; }
+    public void setNome_usuario(String nome_usuario) { this.nome_usuario = nome_usuario; }
 
-    public void setId(int id) { this.id = id; }
-    public void setNome(String nome) { this.nome = nome; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPapel(String papel) { this.papel = papel; }
+    public String getCpf_usuario() { return cpf_usuario; }
+    public void setCpf_usuario(String cpf_usuario) { this.cpf_usuario = cpf_usuario; }
+
+    public String getDt_nasc() { return dt_nasc; }
+    public void setDt_nasc(String dt_nasc) { this.dt_nasc = dt_nasc; }
+
+    public String getEnd_usuario() { return end_usuario; }
+    public void setEnd_usuario(String end_usuario) { this.end_usuario = end_usuario; }
+
+    public String getMail_usuario() { return mail_usuario; }
+    public void setMail_usuario(String mail_usuario) { this.mail_usuario = mail_usuario; }
 }

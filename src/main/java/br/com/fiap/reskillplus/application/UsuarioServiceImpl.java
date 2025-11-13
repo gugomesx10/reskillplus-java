@@ -1,45 +1,57 @@
 package br.com.fiap.reskillplus.application;
 
+import br.com.fiap.reskillplus.application.exceptions.UsuarioJaExisteException;
 import br.com.fiap.reskillplus.domain.model.Usuario;
 import br.com.fiap.reskillplus.domain.repository.UsuarioRepository;
-import br.com.fiap.reskillplus.domain.service.UsuarioDomainService;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.service.UsuarioService;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
-@ApplicationScoped
-public class UsuarioServiceImpl {
+public class UsuarioServiceImpl implements UsuarioService {
 
-    @Inject
-    UsuarioRepository repository;
-
-    @Inject
-    UsuarioDomainService domainService;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario cadastrar(Usuario usuario) {
-        if (!domainService.validarEmail(usuario))
-            throw new IllegalArgumentException("E-mail inválido.");
 
-        repository.salvar(usuario);
-        return usuario;
+    @Override
+    public Usuario criarUsuario(Usuario usuario) {
+        try{
+            buscarUsuario(usuario.getCpf_usuario());
+            throw new UsuarioJaExisteException("Usuario já cadastrado");
+        } catch (EntidadeNaoLocalizada e) {
+            return usuarioRepository.criarUsuario(usuario);
+        }
     }
 
-    public List<Usuario> listarTodos() {
-        return repository.listarTodos();
+    @Override
+    public void editarUsuario(Usuario usuario) {
+        try{
+            Usuario usurioExistente = buscarUsuario(usuario.getCpf_usuario());
+            usuarioRepository.editarUsuario(usuario);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new UsuarioJaExisteException("Usuario não encontrado");
+        }
     }
 
-    public Usuario buscarPorId(int id) {
-        return repository.buscarPorId(id);
+    @Override
+    public Usuario buscarUsuario(String cpf) throws EntidadeNaoLocalizada {
+        return usuarioRepository.buscarUsuario(cpf);
     }
 
-    public void atualizar(Usuario usuario) {
-        repository.atualizar(usuario);
+    @Override
+    public Usuario validarUsuario(String cpf, String senha) {
+        return usuarioRepository.validarUsuario(cpf, senha);
     }
 
-    public void deletar(int id) {
-        repository.deletar(id);
+    @Override
+    public void excluirUsuario(String cpf) {
+        try {
+            Usuario usuarioExistente = buscarUsuario(cpf);
+            usuarioRepository.excluirUsuario(cpf);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new UsuarioJaExisteException("Usuario não encontrado");
+        }
     }
 }

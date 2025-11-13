@@ -1,38 +1,44 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.application.UsuarioServiceImpl;
-import br.com.fiap.reskillplus.dto.input.UsuarioInputDTO;
-import br.com.fiap.reskillplus.dto.output.UsuarioOutputDTO;
-import br.com.fiap.reskillplus.mapper.UsuarioMapper;
+import br.com.fiap.reskillplus.domain.service.UsuarioService;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+import br.com.fiap.reskillplus.domain.model.Usuario;
+
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class UsuarioControllerImpl implements UsuarioController {
 
-    private final UsuarioServiceImpl usuarioServiceImpl;
+    private final UsuarioService usuarioService;
 
-    public UsuarioControllerImpl(UsuarioServiceImpl usuarioServiceImpl) {
-        this.usuarioServiceImpl = usuarioServiceImpl;
+    @Inject
+    public UsuarioControllerImpl(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @Override
-    public UsuarioOutputDTO cadastrar(UsuarioInputDTO dto) {
-        return UsuarioMapper.toOutputDTO(usuarioServiceImpl.cadastrar(UsuarioMapper.toEntity(dto)));
+    public Usuario criarUsuario(Usuario usuario) {
+        return usuarioService.criarUsuario(usuario);
     }
 
     @Override
-    public UsuarioOutputDTO buscarPorId(int id) {
-        return UsuarioMapper.toOutputDTO(usuarioServiceImpl.buscarPorId(id));
+    public void editarUsuario(Usuario usuario) {
+        usuarioService.editarUsuario(usuario);
     }
 
     @Override
-    public List<UsuarioOutputDTO> listarTodos() {
-        return UsuarioMapper.toOutputList(usuarioServiceImpl.listarTodos());
+    public Usuario buscarUsuario(String cpf) throws EntidadeNaoLocalizada {
+        return usuarioService.buscarUsuario(cpf);
     }
 
     @Override
-    public void deletar(int id) {
-        usuarioServiceImpl.deletar(id);
+    public Usuario validarUsuario(String cpf, String senha) {
+        return usuarioService.validarUsuario(cpf, senha);
+    }
+
+    @Override
+    public void excluirUsuario(String cpf) {
+        usuarioService.excluirUsuario(cpf);
     }
 }

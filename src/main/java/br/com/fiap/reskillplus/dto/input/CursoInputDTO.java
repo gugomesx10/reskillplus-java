@@ -2,25 +2,30 @@ package br.com.fiap.reskillplus.dto.input;
 
 public class CursoInputDTO {
 
-    private String titulo;
-    private String descricao;
+    private String nome_curso;
+    private String descricao_curso;
+    private String carga_horaria;
     private String categoria;
-    private int cargaHoraria;
 
-    public CursoInputDTO(String titulo, String descricao, String categoria, int cargaHoraria) {
-        this.titulo = titulo;
-        this.descricao = descricao;
+    public CursoInputDTO() {}
+
+    public CursoInputDTO(String nome_curso, String descricao_curso,
+                         String carga_horaria, String categoria) {
+        this.nome_curso = nome_curso;
+        this.descricao_curso = descricao_curso;
+        this.carga_horaria = carga_horaria;
         this.categoria = categoria;
-        this.cargaHoraria = cargaHoraria;
     }
 
-    public String getTitulo() { return titulo; }
-    public String getDescricao() { return descricao; }
-    public String getCategoria() { return categoria; }
-    public int getCargaHoraria() { return cargaHoraria; }
+    public String getNome_curso() { return nome_curso; }
+    public void setNome_curso(String nome_curso) { this.nome_curso = nome_curso; }
 
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public String getDescricao_curso() { return descricao_curso; }
+    public void setDescricao_curso(String descricao_curso) { this.descricao_curso = descricao_curso; }
+
+    public String getCarga_horaria() { return carga_horaria; }
+    public void setCarga_horaria(String carga_horaria) { this.carga_horaria = carga_horaria; }
+
+    public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
-    public void setCargaHoraria(int cargaHoraria) { this.cargaHoraria = cargaHoraria; }
 }

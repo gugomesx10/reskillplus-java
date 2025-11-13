@@ -1,14 +1,15 @@
 package br.com.fiap.reskillplus.domain.repository;
 
 import br.com.fiap.reskillplus.domain.model.Matricula;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
+
 import java.util.List;
 
 public interface MatriculaRepository {
 
-    void salvar(Matricula matricula);
-    void atualizarProgresso(int id, boolean concluido);
-    void deletar(int id);
-    Matricula buscarPorId(int id);
-    List<Matricula> listarPorUsuario(int usuarioId);
-    List<Matricula> listarTodas();
+    Matricula criarMatricula(Matricula matricula);
+    void editarMatricula(Matricula matricula);
+    Matricula buscarMatricula(String cpf, String nomeCurso) throws EntidadeNaoLocalizada;
+    void excluirMatricula(String cpf, String nomeCurso);
+    List<Matricula> listarMatriculasPorUsuario(String cpf);
 }

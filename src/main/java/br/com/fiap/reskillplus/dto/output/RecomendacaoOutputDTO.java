@@ -1,37 +1,31 @@
 package br.com.fiap.reskillplus.dto.output;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 public class RecomendacaoOutputDTO {
 
-    private int id;
-    private int usuarioId;
-    private int cursoId;
-    private double relevancia;
-    private Date dataGeracao;
+    private String cpf_usuario;
+    private String nome_curso;
+    private String motivo;
+    private String data_recomendacao;
 
+    public RecomendacaoOutputDTO() {}
 
-    public RecomendacaoOutputDTO(int id, int usuarioId, int cursoId, double relevancia, Date dataGeracao) {
-        this.id = id;
-        this.usuarioId = usuarioId;
-        this.cursoId = cursoId;
-        this.relevancia = relevancia;
-        this.dataGeracao = dataGeracao;
+    public RecomendacaoOutputDTO(String cpf_usuario, String nome_curso,
+                                 String motivo, String data_recomendacao) {
+        this.cpf_usuario = cpf_usuario;
+        this.nome_curso = nome_curso;
+        this.motivo = motivo;
+        this.data_recomendacao = data_recomendacao;
     }
 
-    public RecomendacaoOutputDTO(int id, int usuarioId, int cursoId, double relevancia, LocalDate dataGeracao) {
-    }
+    public String getCpf_usuario() { return cpf_usuario; }
+    public void setCpf_usuario(String cpf_usuario) { this.cpf_usuario = cpf_usuario; }
 
-    public int getId() { return id; }
-    public int getUsuarioId() { return usuarioId; }
-    public int getCursoId() { return cursoId; }
-    public double getRelevancia() { return relevancia; }
-    public Date getDataGeracao() { return dataGeracao; }
+    public String getNome_curso() { return nome_curso; }
+    public void setNome_curso(String nome_curso) { this.nome_curso = nome_curso; }
 
-    public void setId(int id) { this.id = id; }
-    public void setUsuarioId(int usuarioId) { this.usuarioId = usuarioId; }
-    public void setCursoId(int cursoId) { this.cursoId = cursoId; }
-    public void setRelevancia(double relevancia) { this.relevancia = relevancia; }
-    public void setDataGeracao(Date dataGeracao) { this.dataGeracao = dataGeracao; }
+    public String getMotivo() { return motivo; }
+    public void setMotivo(String motivo) { this.motivo = motivo; }
+
+    public String getData_recomendacao() { return data_recomendacao; }
+    public void setData_recomendacao(String data_recomendacao) { this.data_recomendacao = data_recomendacao; }
 }

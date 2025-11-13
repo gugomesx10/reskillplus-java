@@ -1,59 +1,34 @@
 package br.com.fiap.reskillplus.domain.model;
 
-import java.util.Objects;
-
 public class Usuario {
-
-    private int id;
-    private String nome;
-    private String email;
+    private String nome_usuario;
+    private String cpf_usuario;
     private String senha;
-    private String papel;
+    private String dt_nasc;
+    private String end_usuario;
+    private String mail_usuario;
 
-    public Usuario() {}
+    public Usuario(){ }
 
-    public Usuario(int id, String nome, String email, String senha, String papel) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
+    public Usuario(String nome_usuario, String cpf_usuario, String senha, String dt_nasc, String end_usuario, String mail_usuario) {
+        this.nome_usuario = nome_usuario;
+        this.cpf_usuario = cpf_usuario;
         this.senha = senha;
-        this.papel = papel;
+        this.dt_nasc = dt_nasc;
+        this.end_usuario = end_usuario;
+        this.mail_usuario = mail_usuario;
     }
 
-    public Usuario(String nome, String email, String senha, String papel) {
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.papel = papel;
-    }
-
-    public int getId() { return id; }
-    public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public String getSenha() { return senha; }
-    public String getPapel() { return papel; }
-
-    public void setId(int id) { this.id = id; }
-    public void setNome(String nome) { this.nome = nome; }
-    public void setEmail(String email) { this.email = email; }
-    public void setSenha(String senha) { this.senha = senha; }
-    public void setPapel(String papel) { this.papel = papel; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Usuario)) return false;
-        Usuario usuario = (Usuario) o;
-        return id == usuario.id && Objects.equals(email, usuario.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email);
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{id=" + id + ", nome='" + nome + "', email='" + email + "', papel='" + papel + "'}";
-    }
+    public String getNome_usuario() {return nome_usuario;}
+    public void setNome_usuario(String nome_usuario) {this.nome_usuario = nome_usuario;}
+    public String getCpf_usuario() {return cpf_usuario;}
+    public void setCpf_usuario(String cpf_usuario) {this.cpf_usuario = cpf_usuario;}
+    public String getSenha() {return senha;}
+    public void setSenha(String senha) {this.senha = senha;}
+    public String getDt_nasc() {return dt_nasc;}
+    public void setDt_nasc(String dt_nasc) {this.dt_nasc = dt_nasc;}
+    public String getEnd_usuario() {return end_usuario;}
+    public void setEnd_usuario(String end_usuario) {this.end_usuario = end_usuario;}
+    public String getMail_usuario() {return mail_usuario;}
+    public void setMail_usuario(String mail_usuario) {this.mail_usuario = mail_usuario;}
 }

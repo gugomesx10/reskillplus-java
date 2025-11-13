@@ -1,14 +1,13 @@
 package br.com.fiap.reskillplus.domain.repository;
 
 import br.com.fiap.reskillplus.domain.model.Usuario;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
 public interface UsuarioRepository {
 
-    void salvar(Usuario usuario);
-    void atualizar(Usuario usuario);
-    void deletar(int id);
-    Usuario buscarPorId(int id);
-    Usuario buscarPorEmail(String email);
-    List<Usuario> listarTodos();
+    Usuario criarUsuario(Usuario usuario);
+    void editarUsuario(Usuario usuario);
+    Usuario buscarUsuario(String cpf) throws EntidadeNaoLocalizada;
+    Usuario validarUsuario(String cpf, String senha);
+    void excluirUsuario(String cpf);
 }

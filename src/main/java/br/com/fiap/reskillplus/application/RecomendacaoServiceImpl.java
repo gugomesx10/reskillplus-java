@@ -1,42 +1,51 @@
 package br.com.fiap.reskillplus.application;
 
+import br.com.fiap.reskillplus.application.exceptions.RecomendacaoJaExisteException;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 import br.com.fiap.reskillplus.domain.model.Recomendacao;
 import br.com.fiap.reskillplus.domain.repository.RecomendacaoRepository;
-import br.com.fiap.reskillplus.domain.service.RecomendacaoDomainService;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.service.RecomendacaoService;
 
-@ApplicationScoped
-public class RecomendacaoServiceImpl {
+public class RecomendacaoServiceImpl implements RecomendacaoService {
 
-    @Inject
-    RecomendacaoRepository repository;
-
-    @Inject
-    RecomendacaoDomainService domainService;
+    private final RecomendacaoRepository recomendacaoRepository;
 
     public RecomendacaoServiceImpl(RecomendacaoRepository recomendacaoRepository) {
+        this.recomendacaoRepository = recomendacaoRepository;
     }
 
-    public void gerar(Recomendacao recomendacao, double baseScore) {
-        domainService.calcularRelevancia(recomendacao, baseScore);
-        repository.salvar(recomendacao);
+    @Override
+    public Recomendacao criarRecomendacao(Recomendacao recomendacao) {
+        try {
+            buscarRecomendacao(recomendacao.getCpf_usuario(), recomendacao.getNome_curso());
+            throw new RecomendacaoJaExisteException("Recomendação já existe");
+        } catch (EntidadeNaoLocalizada e) {
+            return recomendacaoRepository.criarRecomendacao(recomendacao);
+        }
     }
 
-    public List<Recomendacao> listarPorUsuario(int usuarioId) {
-        return repository.listarPorUsuario(usuarioId);
+    @Override
+    public void editarRecomendacao(Recomendacao recomendacao) {
+        try {
+            buscarRecomendacao(recomendacao.getCpf_usuario(), recomendacao.getNome_curso());
+            recomendacaoRepository.editarRecomendacao(recomendacao);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Recomendação não encontrada");
+        }
     }
 
-    public List<Recomendacao> listarTodas() {
-        return repository.listarTodas();
+    @Override
+    public Recomendacao buscarRecomendacao(String cpf, String curso) throws EntidadeNaoLocalizada {
+        return recomendacaoRepository.buscarRecomendacao(cpf, curso);
     }
 
-    public void deletar(int id) {
-        repository.deletar(id);
-    }
-
-    public Recomendacao gerar(Recomendacao entity) {
-        return null;
+    @Override
+    public void excluirRecomendacao(String cpf, String curso) {
+        try {
+            buscarRecomendacao(cpf, curso);
+            recomendacaoRepository.excluirRecomendacao(cpf, curso);
+        } catch (EntidadeNaoLocalizada e) {
+            throw new RuntimeException("Recomendação não encontrada");
+        }
     }
 }

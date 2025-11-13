@@ -1,12 +1,12 @@
 package br.com.fiap.reskillplus.interfaces;
 
-import br.com.fiap.reskillplus.dto.input.MatriculaInputDTO;
-import br.com.fiap.reskillplus.dto.output.MatriculaOutputDTO;
-import java.util.List;
+import br.com.fiap.reskillplus.domain.model.Matricula;
+import br.com.fiap.reskillplus.domain.exception.EntidadeNaoLocalizada;
 
 public interface MatriculaController {
-    MatriculaOutputDTO cadastrar(MatriculaInputDTO dto);
-    List<MatriculaOutputDTO> listarTodas();
-    List<MatriculaOutputDTO> listarPorUsuario(int usuarioId);
-    void deletar(int id);
+
+    Matricula criarMatricula(Matricula matricula);
+    void editarMatricula(Matricula matricula);
+    Matricula buscarMatricula(String cpf, String curso) throws EntidadeNaoLocalizada;
+    void excluirMatricula(String cpf, String curso);
 }

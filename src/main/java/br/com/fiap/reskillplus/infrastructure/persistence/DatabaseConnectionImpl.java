@@ -1,21 +1,19 @@
 package br.com.fiap.reskillplus.infrastructure.persistence;
 
-import io.agroal.api.AgroalDataSource;
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@ApplicationScoped
-public class DatabaseConnectionImpl implements DatabaseConnection {
+public final class DatabaseConnectionImpl implements DatabaseConnection {
 
-    private final AgroalDataSource dataSource;
+    private final DataSource dataSource;
 
-    public DatabaseConnectionImpl(AgroalDataSource dataSource) {
+    public DatabaseConnectionImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        return this.dataSource.getConnection();
     }
 }
