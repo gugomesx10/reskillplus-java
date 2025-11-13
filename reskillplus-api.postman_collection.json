@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "reskillplus-api-collection-2025",
+    "_postman_id": "reskillplus-api-collection-002",
     "name": "ReskillPlus API - Clean Architecture",
-    "description": "Coleção completa da API ReskillPlus\nImplementada com Clean Architecture, JDBC, Quarkus 3.x e Oracle FIAP.\nBase URL: {{base_url}}",
+    "description": "Coleção de endpoints da API ReskillPlus (Quarkus 3 + JDBC Oracle)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -17,66 +17,146 @@
   ],
   "item": [
     {
-      "name": "Usuario",
+      "name": "Usuário",
       "item": [
         {
-          "name": "Criar Usuário",
+          "name": "Criar Usuário (novo CPF)",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"cpf_usuario\": \"12345678900\",\n  \"nome_usuario\": \"Gustavo Gomes Martins\",\n  \"senha\": \"1234\",\n  \"dt_nasc\": \"01/01/2000\",\n  \"end_usuario\": \"Rua Nova\",\n  \"mail_usuario\": \"rm555999@fiap.com.br\"\n}"
+              "raw": "{\n  \"cpf_usuario\": \"99988877766\",\n  \"nome_usuario\": \"Novo Usuario\",\n  \"senha\": \"1234\",\n  \"dt_nasc\": \"01/01/2000\",\n  \"end_usuario\": \"Rua Nova API\",\n  \"mail_usuario\": \"novo.usuario@example.com\"\n}"
             },
-            "url": "{{base_url}}/usuario",
-            "description": "Cria um novo usuário"
+            "url": {
+              "raw": "{{base_url}}/usuario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuario"
+              ]
+            }
           }
         },
         {
-          "name": "Buscar Usuário por CPF",
+          "name": "Buscar Usuário por CPF (novo)",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/usuario/buscar/12345678900",
-            "description": "Retorna um usuário pelo CPF"
+            "url": {
+              "raw": "{{base_url}}/usuario/buscar/99988877766",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuario",
+                "buscar",
+                "99988877766"
+              ]
+            }
           }
         },
         {
-          "name": "Atualizar Usuário",
+          "name": "Validar Usuário (login novo)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/usuario/validar/99988877766/1234",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuario",
+                "validar",
+                "99988877766",
+                "1234"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar Usuário (novo)",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"cpf_usuario\": \"12345678900\",\n  \"nome_usuario\": \"Gustavo Martins\",\n  \"senha\": \"9999\",\n  \"dt_nasc\": \"01/01/2000\",\n  \"end_usuario\": \"Rua Atualizada\",\n  \"mail_usuario\": \"novoemail@gmail.com\"\n}"
+              "raw": "{\n  \"cpf_usuario\": \"99988877766\",\n  \"nome_usuario\": \"Novo Usuario Editado\",\n  \"senha\": \"1234\",\n  \"dt_nasc\": \"01/01/2000\",\n  \"end_usuario\": \"Rua Editada\",\n  \"mail_usuario\": \"novo.usuario.editado@example.com\"\n}"
             },
-            "url": "{{base_url}}/usuario",
-            "description": "Atualiza dados do usuário"
+            "url": {
+              "raw": "{{base_url}}/usuario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuario"
+              ]
+            }
           }
         },
         {
-          "name": "Excluir Usuário",
+          "name": "Excluir Usuário (novo)",
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/usuario/excluir/12345678900",
-            "description": "Remove um usuário pelo CPF"
+            "url": {
+              "raw": "{{base_url}}/usuario/excluir/99988877766",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuario",
+                "excluir",
+                "99988877766"
+              ]
+            }
           }
         }
       ]
     },
-
     {
       "name": "Curso",
       "item": [
@@ -85,14 +165,28 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nome_curso\": \"Java Avançado\",\n  \"descricao_curso\": \"Curso completo de Java\",\n  \"carga_horaria\": \"40h\",\n  \"categoria\": \"Programação\"\n}"
             },
-            "url": "{{base_url}}/curso"
+            "url": {
+              "raw": "{{base_url}}/curso",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "curso"
+              ]
+            }
           }
         },
         {
@@ -100,25 +194,55 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/curso/buscar/Java Avançado"
+            "url": {
+              "raw": "{{base_url}}/curso/buscar/Java Avançado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "curso",
+                "buscar",
+                "Java Avançado"
+              ]
+            }
           }
         },
         {
-          "name": "Atualizar Curso",
+          "name": "Editar Curso",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome_curso\": \"Java Avançado\",\n  \"descricao_curso\": \"Curso atualizado\",\n  \"carga_horaria\": \"50h\",\n  \"categoria\": \"Back-end\"\n}"
+              "raw": "{\n  \"nome_curso\": \"Java Avançado\",\n  \"descricao_curso\": \"Atualizado\",\n  \"carga_horaria\": \"60h\",\n  \"categoria\": \"Backend\"\n}"
             },
-            "url": "{{base_url}}/curso"
+            "url": {
+              "raw": "{{base_url}}/curso",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "curso"
+              ]
+            }
           }
         },
         {
@@ -126,14 +250,26 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/curso/excluir/Java Avançado"
+            "url": {
+              "raw": "{{base_url}}/curso/excluir/Java Avançado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "curso",
+                "excluir",
+                "Java Avançado"
+              ]
+            }
           }
         }
       ]
     },
-
     {
       "name": "Habilidade",
       "item": [
@@ -142,14 +278,28 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome_habilidade\": \"Spring\",\n  \"descricao_habilidade\": \"Framework Java\",\n  \"nivel\": \"Avançado\",\n  \"area\": \"Back-end\"\n}"
+              "raw": "{\n  \"nome_habilidade\": \"Spring\",\n  \"descricao_habilidade\": \"Framework Java\",\n  \"nivel\": \"Avançado\",\n  \"area\": \"Backend\"\n}"
             },
-            "url": "{{base_url}}/habilidade"
+            "url": {
+              "raw": "{{base_url}}/habilidade",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "habilidade"
+              ]
+            }
           }
         },
         {
@@ -157,25 +307,55 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/habilidade/buscar/Spring"
+            "url": {
+              "raw": "{{base_url}}/habilidade/buscar/Spring",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "habilidade",
+                "buscar",
+                "Spring"
+              ]
+            }
           }
         },
         {
-          "name": "Atualizar Habilidade",
+          "name": "Editar Habilidade",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome_habilidade\": \"Spring\",\n  \"descricao_habilidade\": \"Atualizado\",\n  \"nivel\": \"Intermediário\",\n  \"area\": \"Backend\"\n}"
+              "raw": "{\n  \"nome_habilidade\": \"Spring\",\n  \"descricao_habilidade\": \"Framework Java Atualizado\",\n  \"nivel\": \"Intermediário\",\n  \"area\": \"Backend\"\n}"
             },
-            "url": "{{base_url}}/habilidade"
+            "url": {
+              "raw": "{{base_url}}/habilidade",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "habilidade"
+              ]
+            }
           }
         },
         {
@@ -183,30 +363,56 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/habilidade/excluir/Spring"
+            "url": {
+              "raw": "{{base_url}}/habilidade/excluir/Spring",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "habilidade",
+                "excluir",
+                "Spring"
+              ]
+            }
           }
         }
       ]
     },
-
     {
-      "name": "Matricula",
+      "name": "Matrícula",
       "item": [
         {
           "name": "Criar Matrícula",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"cpf_usuario\": \"12345678900\",\n  \"nome_curso\": \"Java Avançado\",\n  \"dt_matricula\": \"12/11/2025\",\n  \"status\": \"ATIVA\"\n}"
             },
-            "url": "{{base_url}}/matricula"
+            "url": {
+              "raw": "{{base_url}}/matricula",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "matricula"
+              ]
+            }
           }
         },
         {
@@ -214,10 +420,27 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/matricula/buscar/12345678900/Java Avançado"
+            "url": {
+              "raw": "{{base_url}}/matricula/buscar/12345678900/Java Avançado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "matricula",
+                "buscar",
+                "12345678900",
+                "Java Avançado"
+              ]
+            }
           }
         },
         {
@@ -225,14 +448,27 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/matricula/excluir/12345678900/Java Avançado"
+            "url": {
+              "raw": "{{base_url}}/matricula/excluir/12345678900/Java Avançado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "matricula",
+                "excluir",
+                "12345678900",
+                "Java Avançado"
+              ]
+            }
           }
         }
       ]
     },
-
     {
       "name": "Recomendação",
       "item": [
@@ -241,14 +477,28 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"cpf_usuario\": \"12345678900\",\n  \"nome_curso\": \"Java Avançado\",\n  \"motivo\": \"Alta compatibilidade\",\n  \"data_recomendacao\": \"10/11/2025\"\n}"
             },
-            "url": "{{base_url}}/recomendacao"
+            "url": {
+              "raw": "{{base_url}}/recomendacao",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recomendacao"
+              ]
+            }
           }
         },
         {
@@ -256,10 +506,27 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" },
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/recomendacao/buscar/12345678900/Java Avançado"
+            "url": {
+              "raw": "{{base_url}}/recomendacao/buscar/12345678900/Java Avançado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recomendacao",
+                "buscar",
+                "12345678900",
+                "Java Avançado"
+              ]
+            }
           }
         },
         {
@@ -267,9 +534,23 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "x-api-key", "value": "{{api_key}}" }
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}"
+              }
             ],
-            "url": "{{base_url}}/recomendacao/excluir/12345678900/Java Avançado"
+            "url": {
+              "raw": "{{base_url}}/recomendacao/excluir/12345678900/Java Avançado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "recomendacao",
+                "excluir",
+                "12345678900",
+                "Java Avançado"
+              ]
+            }
           }
         }
       ]
