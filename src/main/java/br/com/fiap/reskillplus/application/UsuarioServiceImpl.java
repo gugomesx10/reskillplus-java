@@ -19,7 +19,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario criarUsuario(Usuario usuario) {
         try{
             buscarUsuario(usuario.getCpf_usuario());
-            throw new UsuarioJaExisteException("Usuario já cadastrado");
+            throw new UsuarioJaExisteException("Usuario já cadastrado0");
         } catch (EntidadeNaoLocalizada e) {
             return usuarioRepository.criarUsuario(usuario);
         }
