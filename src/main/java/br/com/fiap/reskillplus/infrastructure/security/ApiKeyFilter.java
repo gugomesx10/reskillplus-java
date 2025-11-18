@@ -9,6 +9,7 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
+
 import java.io.IOException;
 
 @Provider
@@ -20,6 +21,20 @@ public class ApiKeyFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+
+        String path = requestContext.getUriInfo().getPath();
+        System.out.println("PATH: " + path);
+
+        // === LIBERA TODAS AS ROTAS DE AUTENTICAÇÃO (OAUTH) ===
+        if (path.startsWith("/auth/github") ||
+                path.startsWith("auth/github") ||
+                path.startsWith("/auth/google") ||
+                path.startsWith("auth/google") ||
+                path.startsWith("/auth/microsoft") ||
+                path.startsWith("auth/microsoft")) {
+            return;
+        }
+
         String apiKey = requestContext.getHeaderString("x-api-key");
 
         if (apiKey == null || !apiKeyValidator.isValid(apiKey)) {

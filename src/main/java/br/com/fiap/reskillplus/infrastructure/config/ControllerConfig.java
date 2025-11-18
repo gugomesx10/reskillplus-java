@@ -1,26 +1,12 @@
 package br.com.fiap.reskillplus.infrastructure.config;
 
-import br.com.fiap.reskillplus.domain.service.UsuarioService;
-import br.com.fiap.reskillplus.domain.service.CursoService;
-import br.com.fiap.reskillplus.domain.service.HabilidadeService;
-import br.com.fiap.reskillplus.domain.service.MatriculaService;
-import br.com.fiap.reskillplus.domain.service.RecomendacaoService;
+import br.com.fiap.reskillplus.application.AuthServiceImpl;
+import br.com.fiap.reskillplus.domain.service.*;
 
-import br.com.fiap.reskillplus.interfaces.UsuarioController;
-import br.com.fiap.reskillplus.interfaces.UsuarioControllerImpl;
+import br.com.fiap.reskillplus.interfaces.*;
 
-import br.com.fiap.reskillplus.interfaces.CursoController;
-import br.com.fiap.reskillplus.interfaces.CursoControllerImpl;
-
-import br.com.fiap.reskillplus.interfaces.HabilidadeController;
-import br.com.fiap.reskillplus.interfaces.HabilidadeControllerImpl;
-
-import br.com.fiap.reskillplus.interfaces.MatriculaController;
-import br.com.fiap.reskillplus.interfaces.MatriculaControllerImpl;
-
-import br.com.fiap.reskillplus.interfaces.RecomendacaoController;
-import br.com.fiap.reskillplus.interfaces.RecomendacaoControllerImpl;
-
+import br.com.fiap.reskillplus.mapper.AuthMapper;
+import br.com.fiap.reskillplus.mapper.PagamentoMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
@@ -50,4 +36,15 @@ public class ControllerConfig {
     public RecomendacaoController recomendacaoController(RecomendacaoService recomendacaoService) {
         return new RecomendacaoControllerImpl(recomendacaoService);
     }
+
+    @ApplicationScoped
+    public AuthController authController(AuthServiceImpl authServiceImpl, AuthMapper authMapper) {
+        return new AuthControllerImpl(authServiceImpl, authMapper);
+    }
+
+    @ApplicationScoped
+    public PagamentoController pagamentoController(PagamentoService pagamentoService, PagamentoMapper mapper) {
+        return new PagamentoControllerImpl(pagamentoService, mapper);
+    }
+
 }

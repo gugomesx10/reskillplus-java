@@ -38,4 +38,14 @@ public class DatabaseConfig {
     public RecomendacaoRepository recomendacaoRepository(DatabaseConnection databaseConnection) {
         return new JdbcRecomendacaoRepository(databaseConnection);
     }
+
+    @ApplicationScoped
+    public AuthRepository authRepository(DatabaseConnection databaseConnection) {
+        return new JdbcAuthRepository(databaseConnection);
+    }
+
+    @ApplicationScoped
+    public PagamentoRepository pagamentoRepository(DatabaseConnection databaseConnection) {
+        return new JdbcPagamentoRepository(databaseConnection);
+    }
 }
